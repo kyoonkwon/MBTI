@@ -25,6 +25,10 @@ public class GalleryAdapter extends BaseAdapter{
         this.m_array = new ArrayList<GalleryItem>();
     }
 
+    public void deleteItem(int position)  {
+        m_array.remove(position);
+    }
+
     @Override
     public int getCount() {
         return this.m_array.size();

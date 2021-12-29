@@ -2,7 +2,9 @@ package com.example.madcamp_pj1.ui.gallery;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
@@ -16,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,6 +26,8 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.madcamp_pj1.MainActivity;
 import com.example.madcamp_pj1.R;
@@ -43,6 +48,7 @@ public class GalleryFragment extends Fragment {
     private GridView m_grid;
     private GalleryAdapter m_gallAdt;
     private int size;
+
     public void getGalleryPermission(Activity activity, Context context){
         String temp = "";
         int permissionForGalleryRead = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE);
@@ -81,14 +87,13 @@ public class GalleryFragment extends Fragment {
                 out.close();
 
                 m_gallAdt.setItem(bm);
-                m_gallAdt.notifyDataSetChanged();
-                m_grid.setAdapter(m_gallAdt);
+                refresh();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else if(requestCode == 111 && resultCode == RESULT_OK){
             try {
-             Bundle extras = data.getExtras();
+                Bundle extras = data.getExtras();
                 Bitmap bm = (Bitmap)extras.get("data");
                 File filesDir = getActivity().getFilesDir();
                 File file = new File(filesDir, "img" + m_gallAdt.getCount() + ".png");
@@ -100,12 +105,16 @@ public class GalleryFragment extends Fragment {
                 out.close();
 
                 m_gallAdt.setItem(bm);
-                m_gallAdt.notifyDataSetChanged();
-                m_grid.setAdapter(m_gallAdt);
+                refresh();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void refresh(){
+        m_gallAdt.notifyDataSetChanged();
+        m_grid.setAdapter(m_gallAdt);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
@@ -122,24 +131,47 @@ public class GalleryFragment extends Fragment {
         m_grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                final Object item = m_gallAdt.getItem(position);
-
                 if(position == 0) {
-                    // dialog TBA
-                    if(false) { // gallery
-                        getGalleryPermission(activity, context);
-                        Intent intent = new Intent();
-                        intent.setType("image/*");
-                        intent.setAction(Intent.ACTION_GET_CONTENT);
-                        startActivityForResult(intent, 101);
-                    }
-                    else{
-                        getCameraPermission(activity, context);
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(intent, 111);
-                    }
+                    AlertDialog.Builder dlg = new AlertDialog.Builder(activity);
+                    dlg.setTitle("이미지 가져오기");
+                    dlg.setMessage("어디서 가져올지 정하세용");
+                    dlg.setNegativeButton("카메라", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            getCameraPermission(activity, context);
+                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            startActivityForResult(intent, 111);
+                        }
+                    });
+                    dlg.setPositiveButton("갤러리", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            getGalleryPermission(activity, context);
+                            Intent intent = new Intent();
+                            intent.setType("image/*");
+                            intent.setAction(Intent.ACTION_GET_CONTENT);
+                            startActivityForResult(intent, 101);
+                        }
+                    });
+                    dlg.setNeutralButton("취소", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Toast.makeText(context, "Cancel Click", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    AlertDialog dialog = dlg.create();
+                    dialog.show();
+
                 } else {
-                    // 확대
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("position", position);
+                    FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
+                    BigFragment bigFragment = new BigFragment();
+                    bigFragment.setArguments(bundle);
+                    transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                    // transaction.replace(R.id.nav_host_fragment, bigFragment);
+                    transaction.add(R.id.nav_host_fragment, bigFragment);
+                    transaction.commit();
                 }
             }
         });
@@ -166,8 +198,7 @@ public class GalleryFragment extends Fragment {
                     m_gallAdt.setItem(bitmap);
                     count++;
                 }
-                else
-                    break;
+                else break;
             }
         } catch (Exception e) {
             e.printStackTrace();

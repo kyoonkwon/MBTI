@@ -41,13 +41,9 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
-        // ****
         File filesDir = this.getFilesDir();
         File[] list =filesDir.listFiles();
-        for(int i=0; i<list.length;++i) {
-            Log.e("PATH", list[i].getName());
-        }
-            File isInitialized = new File(filesDir, "isInitialized.tmp");
+        File isInitialized = new File(filesDir, "isInitialized.tmp");
         try {
             if(isInitialized.createNewFile()){
                 AssetManager am = this.getAssets();
