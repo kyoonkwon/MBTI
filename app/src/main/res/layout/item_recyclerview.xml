@@ -8,39 +8,49 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:padding="20dp">
+        android:padding="20dp"
+        android:weightSum="10">
 
-        <!--프로필 사진-->
-        <ImageView
+        <ImageButton
             android:id="@+id/profile"
-            android:contentDescription="profile"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/ic_launcher_foreground"/>
+            android:contentDescription="@string/title_home"
+            android:layout_width="0dp"
+            android:layout_height="30sp"
+            android:src="@drawable/ic_launcher_foreground"
+            android:layout_weight="1"/>
 
-        <!--이름-->
         <TextView
             android:id="@+id/name"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginLeft="20dp"
-            android:text="이름"
+            android:text="@string/title_home"
             android:textSize="16sp"
-            android:textColor="#000"/>
+            android:textColor="#000"
+            android:layout_weight="3"
+            android:textAlignment="center"
+            android:layout_gravity="center"/>
 
         <!--상태 메시지-->
         <TextView
             android:id="@+id/message"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="100dp"
-            android:layout_marginLeft="100dp"
-            android:text="상태메시지"
+
+            android:text="@string/title_home"
             android:textSize="12sp"
             android:textColor="#444"
-            android:maxLines="1"/>
+            android:maxLines="1"
+            android:layout_weight="4"/>
+
+        <Button
+            android:id="@+id/recyclerBtn"
+            android:text="수정"
+            android:textSize="11sp"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="2"/>
 
     </LinearLayout>
 

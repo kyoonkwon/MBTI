@@ -1,8 +1,10 @@
 package com.example.madcamp_pj1;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,6 +16,15 @@ import java.util.ArrayList;
 public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.ViewHolder> {
 
     private ArrayList<FriendItem> mFriendList;
+
+    public interface OnItemClickListener{
+        void onEditClick(View v, int position);
+        void onCallClick(View v, int position);
+    }
+    static private OnItemClickListener mListener = null;
+    public void setOnItemClickListener(OnItemClickListener listener){
+        this.mListener = listener;
+    }
 
     @NonNull
     @Override
@@ -32,6 +43,10 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
         notifyDataSetChanged();
     }
 
+    public FriendItem getItem(int position){
+        return mFriendList.get(position);
+    }
+
     @Override
     public int getItemCount() {
         return mFriendList.size();
@@ -41,6 +56,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
         ImageView profile;
         TextView name;
         TextView message;
+        Button edit;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -48,6 +64,32 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
             profile = itemView.findViewById(R.id.profile);
             name = itemView.findViewById(R.id.name);
             message = itemView.findViewById(R.id.message);
+            edit = itemView.findViewById(R.id.recyclerBtn);
+
+            profile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = getAdapterPosition();
+                    if(position != RecyclerView.NO_POSITION){
+                        if(mListener != null){
+                            mListener.onCallClick(view, position);
+                        }
+                    }
+                }
+            });
+
+            edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = getAdapterPosition();
+                    if(position != RecyclerView.NO_POSITION){
+
+                        if(mListener != null){
+                            mListener.onEditClick(view, position);
+                        }
+                    }
+                }
+            });
         }
 
         void onBind(FriendItem item){
