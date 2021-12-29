@@ -1,5 +1,6 @@
 package com.example.madcamp_pj1.ui.gallery;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
@@ -7,16 +8,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+
 import com.example.madcamp_pj1.R;
 import java.util.ArrayList;
 
 public class GalleryAdapter extends BaseAdapter{
     private Context m_context;
     private ArrayList<GalleryItem> m_array;
+    private Activity m_activity;
     private boolean isCameraAttached = false;
     public int imgSize;
-    public GalleryAdapter(Context context, int size) {
+    public GalleryAdapter(Context context, int size, Activity activity) {
         this.imgSize = size;
+        this.m_activity = activity;
         this.m_context = context;
         this.m_array = new ArrayList<GalleryItem>();
     }
@@ -45,8 +49,6 @@ public class GalleryAdapter extends BaseAdapter{
         bitmap = createThumbnail(bitmap);
         imageView.setImageBitmap(bitmap);
 
-//        imageView.setOnClickListener();
-
         return convertView;
     }
 
@@ -63,8 +65,8 @@ public class GalleryAdapter extends BaseAdapter{
         return bitmap;
     }
 
-    public void setItem(Bitmap bitmap, boolean isCamera) {
-        this.m_array.add(new GalleryItem(bitmap, isCamera));
+    public void setItem(Bitmap bitmap) {
+        this.m_array.add(new GalleryItem(bitmap));
     }
 
     public Bitmap getItemBitmap(int position) {

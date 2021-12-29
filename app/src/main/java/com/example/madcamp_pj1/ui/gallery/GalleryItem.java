@@ -5,11 +5,8 @@ import android.graphics.Bitmap;
 public class GalleryItem {
     private Bitmap m_img;
 
-    public boolean isCamera;
-
-    public GalleryItem(Bitmap m_img, boolean isCamera) {
+    public GalleryItem(Bitmap m_img) {
         this.m_img = m_img;
-        this.isCamera = isCamera;
     }
 
     public Bitmap getItemImg() {

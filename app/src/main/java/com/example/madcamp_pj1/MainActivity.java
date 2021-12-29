@@ -1,7 +1,11 @@
 package com.example.madcamp_pj1;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -14,8 +18,15 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
 public class MainActivity extends AppCompatActivity {
 
+    @SuppressLint("WrongThread")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +40,30 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
+
+        // ****
+        File filesDir = this.getFilesDir();
+        File[] list =filesDir.listFiles();
+        for(int i=0; i<list.length;++i) {
+            Log.e("PATH", list[i].getName());
+        }
+            File isInitialized = new File(filesDir, "isInitialized.tmp");
+        try {
+            if(isInitialized.createNewFile()){
+                AssetManager am = this.getAssets();
+                for(int i = 1; i<21; ++i){
+                    File file = new File(filesDir, "img" + i + ".png");
+                    BufferedInputStream buf = new BufferedInputStream(am.open("img"+i+".png"));
+                    Bitmap bitmap = BitmapFactory.decodeStream(buf);
+                    FileOutputStream out = new FileOutputStream(file);
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+                    out.flush();
+                    out.close();
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
