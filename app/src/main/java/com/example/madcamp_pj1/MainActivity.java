@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView, navController);
 
         File filesDir = this.getFilesDir();
-        File[] list =filesDir.listFiles();
         File isInitialized = new File(filesDir, "isInitialized.tmp");
         try {
             if(isInitialized.createNewFile()){

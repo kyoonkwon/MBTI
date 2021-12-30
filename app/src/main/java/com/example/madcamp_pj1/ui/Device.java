@@ -19,11 +19,12 @@ public class Device {
     }
 
     @RequiresApi(api = JELLY_BEAN_MR1)
-    public static int getScreenHeight(Activity activity) {
-        Display display = activity.getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        int height = size.y;
-        return height;
+    public static int getGalleryColumnWidth(Activity activity) {
+        int width = getScreenWidth(activity);
+        int numOfColumns = com.example.madcamp_pj1.R.dimen.gallery_num_of_columns;
+        int horizontalSpacing = com.example.madcamp_pj1.R.dimen.gallery_horizontal_spacing;
+        int size = (width - (numOfColumns+1) * horizontalSpacing) / numOfColumns;
+        return size;
     }
 
 }

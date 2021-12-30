@@ -3,7 +3,6 @@ package com.example.madcamp_pj1.ui.gallery;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +18,6 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.madcamp_pj1.R;
 
 import java.io.File;
-import java.util.List;
 
 public class BigFragment extends Fragment {
     @Nullable
@@ -33,47 +31,39 @@ public class BigFragment extends Fragment {
         Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
         image.setImageBitmap(bitmap);
 
-
-
         Button deleteButton = rootView.findViewById(R.id.delete_button);
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                file.delete();
-                int count = position + 1;
-                while (true){
-                    File filesDir = getActivity().getFilesDir();
-                    File file = new File(filesDir, "img" + count + ".png");
-                    if(file.exists()){
-                        File newName = new File(filesDir, "img" + (count - 1) + ".png");
-                        file.renameTo(newName);
-                        count++;
-                    }
-                    else break;
+        deleteButton.setOnClickListener(v -> {
+            file.delete();
+            int count = position + 1;
+            while (true){
+                File oldFile = new File(filesDir, "img" + count + ".png");
+                if(oldFile.exists()){
+                    File newName = new File(filesDir, "img" + (count - 1) + ".png");
+                    oldFile.renameTo(newName);
+                    count++;
                 }
-
-                List<Fragment> fragmentList = getActivity().getSupportFragmentManager().getFragments();
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.remove(BigFragment.this);
-                fragmentManager.popBackStack();
-                GalleryFragment galleryFragment = new GalleryFragment();
-                transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-                transaction.replace(R.id.nav_host_fragment, galleryFragment);
-
-                transaction.commit();
+                else break;
             }
+            backAndRefreshParentFragment();
         });
 
         Button confirmButton = rootView.findViewById(R.id.confirm_button);
-        confirmButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                fragmentManager.beginTransaction().remove(BigFragment.this).commit();
-            }
-        });
+        confirmButton.setOnClickListener(v -> backToParentFragment());
 
         return rootView;
+    }
+    private void backToParentFragment() {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        fragmentManager.beginTransaction().remove(BigFragment.this).commit();
+    }
+    private void backAndRefreshParentFragment() {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.remove(BigFragment.this);
+        fragmentManager.popBackStack();
+        GalleryFragment galleryFragment = new GalleryFragment();
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        transaction.replace(R.id.nav_host_fragment, galleryFragment);
+        transaction.commit();
     }
 }

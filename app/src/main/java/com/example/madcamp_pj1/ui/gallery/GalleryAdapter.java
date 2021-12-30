@@ -15,18 +15,12 @@ import java.util.ArrayList;
 public class GalleryAdapter extends BaseAdapter{
     private Context m_context;
     private ArrayList<GalleryItem> m_array;
-    private Activity m_activity;
-    private boolean isCameraAttached = false;
-    public int imgSize;
-    public GalleryAdapter(Context context, int size, Activity activity) {
-        this.imgSize = size;
-        this.m_activity = activity;
-        this.m_context = context;
-        this.m_array = new ArrayList<GalleryItem>();
-    }
 
-    public void deleteItem(int position)  {
-        m_array.remove(position);
+    public int imgSize;
+    public GalleryAdapter(Context context, int size) {
+        this.imgSize = size;
+        this.m_context = context;
+        this.m_array = new ArrayList<>();
     }
 
     @Override
@@ -35,7 +29,7 @@ public class GalleryAdapter extends BaseAdapter{
     }
 
     @Override
-    public Object getItem(int position) {
+    public GalleryItem getItem(int position) {
         return this.m_array.get(position);
     }
 
@@ -74,6 +68,6 @@ public class GalleryAdapter extends BaseAdapter{
     }
 
     public Bitmap getItemBitmap(int position) {
-        return this.m_array.get(position).getItemImg();
+        return this.m_array.get(position).getItemBitmap();
     }
 }

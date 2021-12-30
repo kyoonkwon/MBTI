@@ -10,32 +10,31 @@
         android:id="@+id/big_image"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
+        android:paddingLeft="@dimen/big_image_padding"
+        android:paddingRight="@dimen/big_image_padding"
         app:layout_constraintTop_toTopOf="parent"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
         android:background="@color/white"
         />
 
     <Button
         android:id="@+id/confirm_button"
-        android:layout_width="120dp"
-        android:layout_height="50dp"
-
+        android:layout_width="@dimen/button_width"
+        android:layout_height="@dimen/button_height"
+        android:layout_marginRight="@dimen/button_margin"
+        android:layout_marginBottom="@dimen/big_image_padding"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginRight="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="10dp"
-        android:text="확인"
+        android:text="@string/confirm_button_text"
         />
 
     <Button
         android:id="@+id/delete_button"
-        android:layout_width="120dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="10dp"
+        android:layout_width="@dimen/button_width"
+        android:layout_height="@dimen/button_height"
+        android:layout_marginLeft="@dimen/button_margin"
+        android:layout_marginBottom="@dimen/big_image_padding"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginLeft="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:text="삭제"
+        android:text="@string/delete_button_text"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>

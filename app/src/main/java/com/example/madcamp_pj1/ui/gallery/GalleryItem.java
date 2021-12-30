@@ -3,13 +3,13 @@ package com.example.madcamp_pj1.ui.gallery;
 import android.graphics.Bitmap;
 
 public class GalleryItem {
-    private Bitmap m_img;
+    private Bitmap bitmap;
 
-    public GalleryItem(Bitmap m_img) {
-        this.m_img = m_img;
+    public GalleryItem(Bitmap bitmap) {
+        this.bitmap = bitmap;
     }
 
-    public Bitmap getItemImg() {
-        return this.m_img;
+    public Bitmap getItemBitmap() {
+        return this.bitmap;
     }
 }
