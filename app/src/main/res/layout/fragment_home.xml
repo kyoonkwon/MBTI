@@ -17,35 +17,34 @@
             android:orientation="horizontal"
             android:gravity="center_vertical"
             android:weightSum="10"
-            android:padding="20dp">
+            android:padding="10dp">
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/searchView"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="8"
+                app:iconifiedByDefault="false"
+                app:queryHint="@string/hint"
+                android:background="@drawable/bg_white_rounded"/>
 
-            <EditText
-                android:id="@+id/contactName"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="3.5"
-                android:hint="이름"
-                android:textAlignment="center"
-                android:layout_gravity="center"/>
-            <EditText
-                android:id="@+id/contactPhone"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="4.5"
-                android:layout_marginLeft="3dp"
-                android:layout_marginRight="3dp"
-                android:inputType="phone"
-                android:hint="전화번호"
-                android:textAlignment="center"
-                android:layout_gravity="center"/>
-            <Button
+            <ImageButton
                 android:id="@+id/addContact"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_width="0dp"
-                android:text="추가"
-                android:textSize="11sp"
+                android:background="#00000000"
+                android:src="@mipmap/ic_addcontact"
                 android:layout_weight="2"/>
         </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="10dp"
+            android:background="#000"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="10dp"
+            android:background="#000"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"

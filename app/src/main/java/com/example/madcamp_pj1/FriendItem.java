@@ -1,16 +1,18 @@
 package com.example.madcamp_pj1;
 
+import android.graphics.Bitmap;
+
 public class FriendItem {
     String name;
     String message;
-    int resourceId;
+    Bitmap bitmap;
     long id;
     String key;
 
-    public FriendItem(int resourceId, String name, String message, long id, String key) {
+    public FriendItem(Bitmap bitmap, String name, String message, long id, String key) {
         this.name = name;
         this.message= message;
-        this.resourceId = resourceId;
+        this.bitmap = bitmap;
         this.id = id;
         this.key = key;
     }
@@ -18,10 +20,6 @@ public class FriendItem {
     public long getId() { return id; }
 
     public String getKey() {return key; }
-
-    public int getResourceId() {
-        return resourceId;
-    }
 
     public String getMessage() {
         return message;
@@ -31,15 +29,10 @@ public class FriendItem {
         return name;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
+    public Bitmap getBitmap() { return bitmap; }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setResourceId(int resourceId) {
-        this.resourceId = resourceId;
-    }
 }
