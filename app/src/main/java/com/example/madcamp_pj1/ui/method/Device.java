@@ -1,6 +1,7 @@
-package com.example.madcamp_pj1.ui;
+package com.example.madcamp_pj1.ui.method;
 
 import android.app.Activity;
+import android.content.res.Resources;
 import android.graphics.Point;
 import android.view.Display;
 
@@ -21,8 +22,10 @@ public class Device {
     @RequiresApi(api = JELLY_BEAN_MR1)
     public static int getGalleryColumnWidth(Activity activity) {
         int width = getScreenWidth(activity);
-        int numOfColumns = com.example.madcamp_pj1.R.dimen.gallery_num_of_columns;
-        int horizontalSpacing = com.example.madcamp_pj1.R.dimen.gallery_horizontal_spacing;
+        Resources res;
+        res = activity.getResources();
+        int numOfColumns = res.getInteger(com.example.madcamp_pj1.R.integer.gallery_num_of_columns);
+        int horizontalSpacing = (int) (res.getDimension(com.example.madcamp_pj1.R.dimen.gallery_grid_spacing) / res.getDisplayMetrics().density);
         int size = (width - (numOfColumns+1) * horizontalSpacing) / numOfColumns;
         return size;
     }

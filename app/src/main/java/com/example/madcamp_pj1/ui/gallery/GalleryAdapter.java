@@ -1,6 +1,5 @@
 package com.example.madcamp_pj1.ui.gallery;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
@@ -14,7 +13,7 @@ import java.util.ArrayList;
 
 public class GalleryAdapter extends BaseAdapter{
     private Context m_context;
-    private ArrayList<GalleryItem> m_array;
+    private ArrayList<GalleryItem>  m_array;
 
     public int imgSize;
     public GalleryAdapter(Context context, int size) {
@@ -65,6 +64,10 @@ public class GalleryAdapter extends BaseAdapter{
 
     public void setItem(Bitmap bitmap) {
         this.m_array.add(new GalleryItem(bitmap));
+    }
+
+    public void deleteItem(int position){
+        this.m_array.remove(position);
     }
 
     public Bitmap getItemBitmap(int position) {

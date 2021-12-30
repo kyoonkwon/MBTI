@@ -1,10 +1,10 @@
 package com.example.madcamp_pj1.ui.gallery;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
@@ -14,9 +14,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
@@ -30,7 +31,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.madcamp_pj1.MainActivity;
 import com.example.madcamp_pj1.R;
-import com.example.madcamp_pj1.ui.Device;
+import com.example.madcamp_pj1.ui.method.Device;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -47,6 +48,20 @@ public class GalleryFragment extends Fragment {
 
     private GridView m_grid;
     private GalleryAdapter m_gallAdt;
+
+
+    private class OnPinchListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+        @Override
+        public boolean onScale(ScaleGestureDetector detector) {
+            float scaleFactor = detector.getScaleFactor();
+            int colNumDif = -1 * (int) ((scaleFactor-1) * 7);
+            int newColNum = m_grid.getNumColumns() + colNumDif;
+            if(newColNum <= 1) m_grid.setNumColumns(1);
+            else if(newColNum >= m_gallAdt.getCount()) m_grid.setNumColumns(m_gallAdt.getCount());
+            else m_grid.setNumColumns(newColNum);
+            return true;
+        }
+    }
 
     private void getGalleryPermission(Activity activity, Context context){
         String temp = "";
@@ -111,11 +126,17 @@ public class GalleryFragment extends Fragment {
         }
     }
 
-    private void refresh(){
+    public void removeItemInAdapter(int position){
+        m_gallAdt.deleteItem(position);
+        refresh();
+    }
+
+    public void refresh(){
         m_gallAdt.notifyDataSetChanged();
         m_grid.setAdapter(m_gallAdt);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -125,6 +146,12 @@ public class GalleryFragment extends Fragment {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_gallery, container, false);
 
         m_grid = (GridView) rootView.findViewById(R.id.grid_gallery);
+        OnPinchListener onPinchListener = new OnPinchListener();
+        ScaleGestureDetector scaleGestureDetector = new ScaleGestureDetector(context, onPinchListener);
+        m_grid.setOnTouchListener((v, event) -> {
+            scaleGestureDetector.onTouchEvent(event);
+            return false;
+        });
 
         m_grid.setOnItemClickListener((parent, view, position, id) -> {
             if(position == CAMERA_BUTTON_POSITION) {
@@ -153,12 +180,15 @@ public class GalleryFragment extends Fragment {
             } else {
                 Bundle bundle = new Bundle();
                 bundle.putInt("position", position);
-                FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
+
                 BigFragment bigFragment = new BigFragment();
                 bigFragment.setArguments(bundle);
-                transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-                transaction.add(R.id.nav_host_fragment, bigFragment);
-                transaction.commit();
+
+                getParentFragmentManager()
+                        .beginTransaction()
+                        .add(R.id.nav_host_fragment, bigFragment)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                        .commit();
             }
         });
 

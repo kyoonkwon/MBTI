@@ -18,6 +18,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.madcamp_pj1.R;
 
 import java.io.File;
+import java.util.List;
 
 public class BigFragment extends Fragment {
     @Nullable
@@ -44,7 +45,7 @@ public class BigFragment extends Fragment {
                 }
                 else break;
             }
-            backAndRefreshParentFragment();
+            backAndRefreshParentFragment(position);
         });
 
         Button confirmButton = rootView.findViewById(R.id.confirm_button);
@@ -53,17 +54,23 @@ public class BigFragment extends Fragment {
         return rootView;
     }
     private void backToParentFragment() {
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        fragmentManager.beginTransaction().remove(BigFragment.this).commit();
+        getParentFragmentManager()
+               .beginTransaction()
+               .remove(BigFragment.this)
+               .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+               .commit();
     }
-    private void backAndRefreshParentFragment() {
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.remove(BigFragment.this);
-        fragmentManager.popBackStack();
-        GalleryFragment galleryFragment = new GalleryFragment();
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        transaction.replace(R.id.nav_host_fragment, galleryFragment);
-        transaction.commit();
+    private void backAndRefreshParentFragment(int position) {
+        List<Fragment> fragmentList =  getParentFragmentManager().getFragments();
+        for(Fragment fragment : fragmentList)
+            if(fragment.getClass() == GalleryFragment.class){
+                ((GalleryFragment) fragment).removeItemInAdapter(position);
+                break;
+            }
+        getParentFragmentManager()
+                .beginTransaction()
+                .remove(BigFragment.this)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .commit();
     }
 }

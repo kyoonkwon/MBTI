@@ -16,13 +16,13 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginLeft="@dimen/gallery_horizontal_spacing"
-        android:verticalSpacing="@dimen/gallery_vertical_spacing"
-        android:horizontalSpacing="@dimen/gallery_horizontal_spacing"
-        android:numColumns="@dimen/gallery_num_of_columns"
+        android:layout_marginLeft="@dimen/gallery_grid_spacing"
+        android:verticalSpacing="@dimen/gallery_grid_spacing"
+        android:horizontalSpacing="@dimen/gallery_grid_spacing"
+        android:numColumns="@integer/gallery_num_of_columns"
         android:scrollbarStyle="insideInset"
         android:verticalScrollbarPosition="right"
-        android:scrollbarSize="@dimen/gallery_horizontal_spacing"
+        android:scrollbarSize="@dimen/gallery_grid_spacing"
         android:scrollbarThumbVertical="@color/purple_500"
         android:scrollbarTrackVertical="@color/white" />
 
