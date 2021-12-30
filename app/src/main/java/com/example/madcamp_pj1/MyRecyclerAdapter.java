@@ -20,6 +20,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
         void onItemClick(View v, int position);
         void onEditClick(View v, int position);
         void onCallClick(View v, int position);
+        void onMsgClick(View v, int position);
     }
     static private OnItemClickListener mListener = null;
     public void setOnItemClickListener(OnItemClickListener listener){
@@ -57,6 +58,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
         TextView name;
         TextView message;
         ImageButton call;
+        ImageButton msg;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -65,6 +67,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
             name = itemView.findViewById(R.id.name);
             message = itemView.findViewById(R.id.message);
             call = itemView.findViewById(R.id.callBtn);
+            msg = itemView.findViewById(R.id.msgBtn);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -72,7 +75,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
                     int position = getAdapterPosition();
                     if(position != RecyclerView.NO_POSITION){
                         if(mListener != null){
-                            mListener.onEditClick(view, position);
+                            mListener.onItemClick(view, position);
                         }
                     }
                 }
@@ -85,6 +88,18 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
                     if(position != RecyclerView.NO_POSITION){
                         if(mListener != null){
                             mListener.onCallClick(view, position);
+                        }
+                    }
+                }
+            });
+
+            msg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = getAdapterPosition();
+                    if(position != RecyclerView.NO_POSITION){
+                        if(mListener != null){
+                            mListener.onMsgClick(view, position);
                         }
                     }
                 }

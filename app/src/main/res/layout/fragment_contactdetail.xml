@@ -6,66 +6,78 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:weightSum="10">
+        android:weightSum="10"
+        android:background="@color/white"
+        android:clickable="true">
+
+        <Button
+            android:id="@+id/detailCloseBtn"
+            android:layout_width="50sp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_gravity="end"
+            android:text="X"/>
+
+        <ImageView
+            android:id="@+id/detailImg"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="4.5"
+            android:src="@mipmap/ic_person"/>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.5"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="0.5"
-            android:layout_gravity="end"
-            android:text="X"/>
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="5"
-            android:src="@mipmap/ic_person"/>
 
         <TextView
+            android:id="@+id/detailName"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:text="name"
             android:layout_gravity="center"
+            android:textColor="@color/black"
             android:textSize="40sp"/>
 
         <TextView
+            android:id="@+id/detailPhone"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:text="phone"
             android:layout_gravity="center"
-            android:textSize="30sp"/>
+            android:textSize="25sp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_weight="1.3"
             android:orientation="horizontal"
-            android:weightSum="3">
-
-            <Button
+            android:weightSum="4">
+            <View
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_margin="10sp"
-                android:text="전화"/>
+                android:layout_weight="1"/>
             <Button
+                android:id="@+id/detailFixBtn"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:layout_margin="10sp"
                 android:text="수정"/>
             <Button
+                android:id="@+id/detailDelBtn"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:layout_margin="10sp"
                 android:text="삭제"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
 
         </LinearLayout>
 

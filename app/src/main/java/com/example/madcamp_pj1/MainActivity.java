@@ -3,18 +3,27 @@ package com.example.madcamp_pj1;
 import android.Manifest;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -66,9 +75,36 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, permissions, 100);
         }
 
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_CONTACTS) != PackageManager.PERMISSION_GRANTED){
+            String[] permissions = new String[]{Manifest.permission.WRITE_CONTACTS};
+            ActivityCompat.requestPermissions(this, permissions, 100);
+        }
+
 
     }
 
-    //public void change_to
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+    }
 
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            View view = getCurrentFocus();
+
+            if (view != null && view instanceof EditText) {
+                Rect r = new Rect();
+                view.getGlobalVisibleRect(r);
+                int rawX = (int) ev.getRawX();
+                int rawY = (int) ev.getRawY();
+                if (!r.contains(rawX, rawY)) {
+                    hideSoftKeyboard(MainActivity.this);
+                }
+            }
+        }
+
+
+        return super.dispatchTouchEvent(ev);
+    }
 }

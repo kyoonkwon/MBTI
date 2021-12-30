@@ -2,6 +2,7 @@ package com.example.madcamp_pj1.ui.home;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -20,8 +21,11 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -40,6 +44,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.madcamp_pj1.FriendItem;
+import com.example.madcamp_pj1.MainActivity;
 import com.example.madcamp_pj1.MyRecyclerAdapter;
 import com.example.madcamp_pj1.R;
 
@@ -52,7 +57,7 @@ public class HomeFragment extends Fragment {
     private ArrayList<ContactInfo> contactList;
     private ImageButton addContactBtn;
     private SearchView searchView;
-    private String prevText;
+    private String searchText;
 
 
     public void onCreate(Bundle savedInstanceState){
@@ -71,7 +76,6 @@ public class HomeFragment extends Fragment {
         mRecyclerAdapter = new MyRecyclerAdapter();
         if(contactList == null) {
             contactList = getContactList("");
-            prevText = "";
         }
         mRecyclerView = view.findViewById(R.id.recyclerView);
 
@@ -84,14 +88,13 @@ public class HomeFragment extends Fragment {
         mRecyclerAdapter.setOnItemClickListener(new MyRecyclerAdapter.OnItemClickListener() {
 
             @Override
-            public void onItemClick(View v, int position) {
+            public void onEditClick(View v, int position) {
 
             }
 
             @Override
-            public void onEditClick(View v, int position) {
-                FriendItem fi = mRecyclerAdapter.getItem(position);
-                fixContact(fi);
+            public void onItemClick(View v, int position) {
+                showDetail(position);
 
             }
 
@@ -101,6 +104,14 @@ public class HomeFragment extends Fragment {
                 Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + fi.getMessage()));
                 startActivity(intent);
             }
+
+            @Override
+            public void onMsgClick(View v, int position) {
+                FriendItem fi = mRecyclerAdapter.getItem(position);
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.putExtra("address", fi.getMessage());
+                startActivity(intent);
+            }
         });
 
         addContactBtn.setOnClickListener(new View.OnClickListener() {
@@ -108,14 +119,7 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(ContactsContract.Intents.Insert.ACTION);
                 intent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
-
-//                intent.putExtra(ContactsContract.Intents.Insert.NAME, contactName.getText().toString());
-//                intent.putExtra(ContactsContract.Intents.Insert.PHONE, contactPhone.getText());
                 intent.putExtra("finishActivityOnSaveCompleted", true);
-
-//                contactName.setText("");
-//                contactPhone.setText("");
-
                 startActivityForResult(intent, 10);
             }
         });
@@ -127,22 +131,70 @@ public class HomeFragment extends Fragment {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Log.i("contact1 submit", query);
-
-
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                Log.i("contact1 change", newText);
+                searchText = newText;
                 contactList = getContactList(newText);
                 getContactListAsLog();
                 mRecyclerAdapter.notifyDataSetChanged();
                 return true;
             }
         });
+    }
 
+    void delContact(String key){
+        ContentResolver cr = getActivity().getContentResolver();
+        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, ContactsContract.Contacts.LOOKUP_KEY + "= '"
+                + key + "' ", null, null);
+        if (cur != null) {
+
+            while (cur.moveToNext()) {
+
+                try {
+                    String lookupKey = cur.getString(cur
+                            .getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
+                    Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_LOOKUP_URI,
+                            lookupKey);
+
+                    cr.delete(uri, ContactsContract.Contacts.LOOKUP_KEY + "= '" + key + "'", null);
+                } catch (Exception e) {
+                    Log.e("contact1", "deleteContactById: ", e);
+                }
+            }
+            cur.close();
+        }
+        refresh();
+    }
+
+    public void refreshShowDetail(int i){
+        refresh();
+        showDetail(i);
+    }
+
+    public void refresh(){
+        contactList = getContactList(searchText);
+        getContactListAsLog();
+        mRecyclerAdapter.notifyDataSetChanged();
+    }
+
+
+    private void showDetail(int i){
+        FriendItem fi = mRecyclerAdapter.getItem(i);
+
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("fi", fi);
+        bundle.putInt("pos", i);
+        ContactDetailFragment contactDetailFragment = new ContactDetailFragment();
+        contactDetailFragment.setArguments(bundle);
+
+        getParentFragmentManager()
+                .beginTransaction()
+                .add(R.id.nav_host_fragment, contactDetailFragment)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .commit();
     }
 
 
@@ -151,19 +203,10 @@ public class HomeFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == 10) {
+            Log.i("contact1", "frag1");
             FragmentTransaction ft = this.getParentFragmentManager().beginTransaction();
             ft.detach(this).attach(this).commit();
         }
-    }
-
-    void fixContact(FriendItem fi){
-
-        Uri selectedUri = ContactsContract.Contacts.getLookupUri(fi.getId(), fi.getKey());
-        Intent editIntent = new Intent(Intent.ACTION_EDIT);
-        editIntent.setDataAndType(selectedUri, ContactsContract.Contacts.CONTENT_ITEM_TYPE);
-        editIntent.putExtra("finishActivityOnSaveCompleted", true);
-        startActivityForResult(editIntent, 10);
-
     }
 
     private Bitmap queryContactImage(int imageDataRow) {
@@ -238,7 +281,7 @@ public class HomeFragment extends Fragment {
         };
 
         String selection = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " LIKE '%" + name +"%'";
-        Log.i("contact1", selection);
+        //Log.i("contact1", selection);
         String sortOrder = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " COLLATE LOCALIZED ASC";
 
         Cursor cursor = getActivity().getContentResolver().query(uri, projection, selection, null, sortOrder);
