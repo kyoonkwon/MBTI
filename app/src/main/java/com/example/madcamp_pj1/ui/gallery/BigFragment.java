@@ -16,11 +16,18 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.madcamp_pj1.R;
+import com.example.madcamp_pj1.ui.method.OnBackPressedListener;
 
 import java.io.File;
 import java.util.List;
 
-public class BigFragment extends Fragment {
+public class BigFragment extends Fragment implements OnBackPressedListener {
+
+    @Override
+    public void onBackPressed() {
+        backToParentFragment();
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
