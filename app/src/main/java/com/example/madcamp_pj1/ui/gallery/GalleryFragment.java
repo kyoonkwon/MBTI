@@ -14,7 +14,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,7 +52,7 @@ public class GalleryFragment extends Fragment {
         @Override
         public boolean onScale(ScaleGestureDetector detector) {
             float scaleFactor = detector.getScaleFactor();
-            int colNumDif = -1 * (int) ((scaleFactor-1) * 10);
+            int colNumDif = -1 * (int) ((scaleFactor-1) * 12);
             int newColNum = m_grid.getNumColumns() + colNumDif;
             if(newColNum <= 1) m_grid.setNumColumns(1);
             else if(newColNum >= m_gallAdt.getCount()) m_grid.setNumColumns(m_gallAdt.getCount());
