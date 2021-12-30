@@ -16,6 +16,8 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+
+import com.example.madcamp_pj1.ui.gallery.BigFragment;
 import com.example.madcamp_pj1.ui.home.HomeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -35,8 +37,24 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
+    @Override
+    public void onBackPressed() {
+        List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
+        for(Fragment fragment : fragmentList){
+            List<Fragment> childFragments = fragment.getChildFragmentManager().getFragments();
+            for(Fragment childFragment : childFragments){
+                if(childFragment instanceof BigFragment){
+                    ((BigFragment) childFragment).onBackPressed();
+                    return;
+                }
+            }
+        }
+        super.onBackPressed();
+    }
 
     @SuppressLint("WrongThread")
     @Override
@@ -80,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
             String[] permissions = new String[]{Manifest.permission.WRITE_CONTACTS};
             ActivityCompat.requestPermissions(this, permissions, 100);
         }
+
 
 
     }

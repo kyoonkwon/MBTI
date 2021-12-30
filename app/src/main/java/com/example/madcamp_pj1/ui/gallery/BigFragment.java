@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.madcamp_pj1.R;
@@ -31,6 +30,7 @@ public class BigFragment extends Fragment implements OnBackPressedListener {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_big, container, false);
         ImageView image = rootView.findViewById(R.id.big_image);
         int position = getArguments().getInt("position");
