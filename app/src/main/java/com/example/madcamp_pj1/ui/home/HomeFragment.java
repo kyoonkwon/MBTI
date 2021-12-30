@@ -5,6 +5,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -15,12 +25,14 @@ import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 
 import androidx.annotation.NonNull;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 
 import androidx.fragment.app.FragmentTransaction;
@@ -38,15 +50,13 @@ public class HomeFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private MyRecyclerAdapter mRecyclerAdapter;
     private ArrayList<ContactInfo> contactList;
-    private Button addContactBtn;
-    private EditText contactName;
-    private EditText contactPhone;
+    private ImageButton addContactBtn;
+    private SearchView searchView;
+    private String prevText;
 
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-
-        Log.i("contact1", "create");
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -54,10 +64,15 @@ public class HomeFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Log.i("contact1", "created");
+
         mRecyclerAdapter = new MyRecyclerAdapter();
-        contactList = getContactList();
+        if(contactList == null) {
+            contactList = getContactList("");
+            prevText = "";
+        }
         mRecyclerView = view.findViewById(R.id.recyclerView);
 
         /* initiate recyclerview */
@@ -65,36 +80,41 @@ public class HomeFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         addContactBtn = view.findViewById(R.id.addContact);
-        contactName = view.findViewById(R.id.contactName);
-        contactPhone = view.findViewById(R.id.contactPhone);
 
         mRecyclerAdapter.setOnItemClickListener(new MyRecyclerAdapter.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(View v, int position) {
+
+            }
+
             @Override
             public void onEditClick(View v, int position) {
                 FriendItem fi = mRecyclerAdapter.getItem(position);
                 fixContact(fi);
+
             }
 
             @Override
             public void onCallClick(View v, int position) {
                 FriendItem fi = mRecyclerAdapter.getItem(position);
-                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+fi.getMessage()));
+                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + fi.getMessage()));
                 startActivity(intent);
             }
         });
 
         addContactBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 Intent intent = new Intent(ContactsContract.Intents.Insert.ACTION);
                 intent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
 
-                intent.putExtra(ContactsContract.Intents.Insert.NAME, contactName.getText().toString());
-                intent.putExtra(ContactsContract.Intents.Insert.PHONE, contactPhone.getText());
+//                intent.putExtra(ContactsContract.Intents.Insert.NAME, contactName.getText().toString());
+//                intent.putExtra(ContactsContract.Intents.Insert.PHONE, contactPhone.getText());
                 intent.putExtra("finishActivityOnSaveCompleted", true);
 
-                contactName.setText("");
-                contactPhone.setText("");
+//                contactName.setText("");
+//                contactPhone.setText("");
 
                 startActivityForResult(intent, 10);
             }
@@ -102,7 +122,29 @@ public class HomeFragment extends Fragment {
 
 
         getContactListAsLog();
+
+        searchView = view.findViewById(R.id.searchView);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Log.i("contact1 submit", query);
+
+
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Log.i("contact1 change", newText);
+                contactList = getContactList(newText);
+                getContactListAsLog();
+                mRecyclerAdapter.notifyDataSetChanged();
+                return true;
+            }
+        });
+
     }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -124,18 +166,66 @@ public class HomeFragment extends Fragment {
 
     }
 
+    private Bitmap queryContactImage(int imageDataRow) {
+        Cursor c = getActivity().getContentResolver().query(ContactsContract.Data.CONTENT_URI, new String[] {
+                ContactsContract.CommonDataKinds.Photo.PHOTO
+        }, ContactsContract.Data._ID + "=?", new String[] {
+                Integer.toString(imageDataRow)
+        }, null);
+        byte[] imageBytes = null;
+        if (c != null) {
+            if (c.moveToFirst()) {
+                imageBytes = c.getBlob(0);
+            }
+            c.close();
+        }
+
+        if (imageBytes != null) {
+            return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+        } else {
+            return null;
+        }
+    }
+
+    private Bitmap getRoundedCroppedBitmap(Bitmap bitmap) {
+        int widthLight = bitmap.getWidth();
+        int heightLight = bitmap.getHeight();
+
+        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(),
+                Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(output);
+        Paint paintColor = new Paint();
+        paintColor.setFlags(Paint.ANTI_ALIAS_FLAG);
+
+        RectF rectF = new RectF(new Rect(0, 0, widthLight, heightLight));
+
+        canvas.drawRoundRect(rectF, widthLight / 2, heightLight / 2, paintColor);
+
+        Paint paintImage = new Paint();
+        paintImage.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP));
+        canvas.drawBitmap(bitmap, 0, 0, paintImage);
+
+        return output;
+    }
+
     void getContactListAsLog() {
 
         ArrayList<FriendItem> mfriendItems = new ArrayList<>();
 
         for (ContactInfo info : contactList) {
-            Log.i("contact1", info.toString());
-            mfriendItems.add(new FriendItem(R.mipmap.ic_phonecall,info.displayName,info.phoneNumber, info.id, info.key));
+            Bitmap bitmap = queryContactImage((int) info.photoId);
+
+            if(bitmap == null){
+                bitmap = BitmapFactory.decodeResource(getContext().getResources(), R.mipmap.ic_person);
+            }
+            bitmap = getRoundedCroppedBitmap(bitmap);
+            mfriendItems.add(new FriendItem(bitmap,info.displayName,info.phoneNumber, info.id, info.key));
         }
         mRecyclerAdapter.setFriendList(mfriendItems);
     }
 
-    public ArrayList<ContactInfo> getContactList() {
+    public ArrayList<ContactInfo> getContactList(String name) {
         ArrayList<ContactInfo> list = new ArrayList<>();
 
         Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
@@ -147,9 +237,11 @@ public class HomeFragment extends Fragment {
                 ContactsContract.Contacts.LOOKUP_KEY,
         };
 
+        String selection = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " LIKE '%" + name +"%'";
+        Log.i("contact1", selection);
         String sortOrder = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " COLLATE LOCALIZED ASC";
 
-        Cursor cursor = getActivity().getContentResolver().query(uri, projection, null, null, sortOrder);
+        Cursor cursor = getActivity().getContentResolver().query(uri, projection, selection, null, sortOrder);
         if (cursor.moveToFirst()) {
             do {
                 ContactInfo info = new ContactInfo();
@@ -169,25 +261,6 @@ public class HomeFragment extends Fragment {
         return list;
     }
 
-//    private Bitmap getContactPicture(long contactId) {
-//
-//        Bitmap bm = null;
-//
-//        try {
-//            InputStream inputStream = ContactsContract.Contacts
-//                    .openContactPhotoInputStream(getContentResolver(),
-//                            ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, contactId));
-//
-//            if (inputStream != null) {
-//                bm = BitmapFactory.decodeStream(inputStream);
-//                inputStream.close();
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return bm;
-//    }
 
     class ContactInfo {
 

@@ -10,16 +10,16 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:padding="20dp"
+        android:padding="10dp"
         android:weightSum="10">
 
-        <ImageButton
+        <ImageView
             android:id="@+id/profile"
             android:contentDescription="@string/title_home"
             android:layout_width="0dp"
-            android:layout_height="30sp"
+            android:layout_height="40sp"
             android:src="@drawable/ic_launcher_foreground"
-            android:layout_weight="1"/>
+            android:layout_weight="2"/>
 
         <TextView
             android:id="@+id/name"
@@ -28,9 +28,8 @@
             android:text="@string/title_home"
             android:textSize="16sp"
             android:textColor="#000"
-            android:layout_weight="3"
-            android:textAlignment="center"
-            android:layout_gravity="center"/>
+            android:layout_weight="3.5"
+            android:paddingLeft="10sp"/>
 
         <!--상태 메시지-->
         <TextView
@@ -42,23 +41,35 @@
             android:textSize="12sp"
             android:textColor="#444"
             android:maxLines="1"
-            android:layout_weight="4"/>
+            android:layout_weight="3.5"/>
 
-        <Button
-            android:id="@+id/recyclerBtn"
-            android:text="수정"
-            android:textSize="11sp"
-            android:layout_height="wrap_content"
+        <ImageButton
+            android:id="@+id/callBtn"
+            android:layout_height="match_parent"
             android:layout_width="0dp"
-            android:layout_weight="2"/>
+            android:src="@mipmap/ic_phonecall"
+            android:layout_weight="1"/>
 
     </LinearLayout>
 
     <!--구분선-->
-    <View
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginHorizontal="10dp"
-        android:background="#aaa"/>
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="12">
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_weight="2"
+            android:background="#fff"/>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_weight="10"
+            android:background="#eee"/>
+    </LinearLayout>
 
 </LinearLayout>
