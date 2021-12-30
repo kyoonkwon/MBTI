@@ -1,6 +1,7 @@
 package com.example.madcamp_pj1;
 
 import android.Manifest;
+
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
@@ -12,6 +13,7 @@ import android.util.Log;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -59,6 +61,12 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED){
+            String[] permissions = new String[]{Manifest.permission.READ_CONTACTS};
+            ActivityCompat.requestPermissions(this, permissions, 100);
+        }
+
+
     }
 
 }
