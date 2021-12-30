@@ -84,6 +84,7 @@ public class ContactDetailFragment extends Fragment {
                 ((HomeFragment) fragment).refreshShowDetail(getArguments().getInt("pos"));
                 break;
             }
+        Log.i("contact1", "back");
         backToParentFragment();
 
     }
@@ -115,7 +116,6 @@ public class ContactDetailFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 10) {
             Log.i("contact1", "frag2");
-            FragmentTransaction ft = this.getParentFragmentManager().beginTransaction();
             backAndRefreshParentFragment();
             //backToParentFragment();
         }

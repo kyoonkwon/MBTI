@@ -66,6 +66,7 @@ public class HomeFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        searchText = "";
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
@@ -94,6 +95,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onItemClick(View v, int position) {
+                searchView.clearFocus();
                 showDetail(position);
 
             }
@@ -182,19 +184,26 @@ public class HomeFragment extends Fragment {
 
 
     private void showDetail(int i){
-        FriendItem fi = mRecyclerAdapter.getItem(i);
 
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("fi", fi);
-        bundle.putInt("pos", i);
-        ContactDetailFragment contactDetailFragment = new ContactDetailFragment();
-        contactDetailFragment.setArguments(bundle);
+        try {
 
-        getParentFragmentManager()
-                .beginTransaction()
-                .add(R.id.nav_host_fragment, contactDetailFragment)
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .commit();
+            FriendItem fi = mRecyclerAdapter.getItem(i);
+
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("fi", fi);
+            bundle.putInt("pos", i);
+            ContactDetailFragment contactDetailFragment = new ContactDetailFragment();
+            contactDetailFragment.setArguments(bundle);
+
+            getParentFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.nav_host_fragment, contactDetailFragment)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .commit();
+        }
+        catch (Exception e) {
+            Log.e("contact1", "deleteContactById: ", e);
+        }
     }
 
 
