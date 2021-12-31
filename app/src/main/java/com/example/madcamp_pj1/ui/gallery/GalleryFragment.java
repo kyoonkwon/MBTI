@@ -71,7 +71,7 @@ public class GalleryFragment extends Fragment {
         if(permissionForGalleryWrite != PackageManager.PERMISSION_GRANTED)
             temp += Manifest.permission.WRITE_EXTERNAL_STORAGE + " ";
         if (!temp.isEmpty())
-            ActivityCompat.requestPermissions(activity, temp.trim().split(" "), 1);
+            ActivityCompat.requestPermissions(activity,     temp.trim().split(" "), 1);
     }
 
     private void getCameraPermission(Activity activity, Context context){
@@ -179,12 +179,12 @@ public class GalleryFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putInt("position", position);
 
-                BigFragment bigFragment = new BigFragment();
-                bigFragment.setArguments(bundle);
+                MemoFragment memoFragment = new MemoFragment();
+                memoFragment.setArguments(bundle);
 
                 getParentFragmentManager()
                         .beginTransaction()
-                        .add(R.id.nav_host_fragment, bigFragment)
+                        .add(R.id.nav_host_fragment, memoFragment)
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                         .commit();
             }

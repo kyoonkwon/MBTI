@@ -15,12 +15,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.example.madcamp_pj1.FriendItem;
 import com.example.madcamp_pj1.R;
-import com.example.madcamp_pj1.ui.gallery.BigFragment;
-import com.example.madcamp_pj1.ui.gallery.GalleryFragment;
 
 import java.util.List;
 

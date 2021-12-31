@@ -1,7 +1,6 @@
 package com.example.madcamp_pj1;
 
 import android.Manifest;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.pm.PackageManager;
@@ -16,27 +15,23 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
-
-import com.example.madcamp_pj1.ui.gallery.BigFragment;
-import com.example.madcamp_pj1.ui.home.HomeFragment;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.madcamp_pj1.ui.gallery.MemoFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -47,8 +42,8 @@ public class MainActivity extends AppCompatActivity {
         for(Fragment fragment : fragmentList){
             List<Fragment> childFragments = fragment.getChildFragmentManager().getFragments();
             for(Fragment childFragment : childFragments){
-                if(childFragment instanceof BigFragment){
-                    ((BigFragment) childFragment).onBackPressed();
+                if(childFragment instanceof MemoFragment){
+                    ((MemoFragment) childFragment).onBackPressed();
                     return;
                 }
             }
@@ -73,6 +68,11 @@ public class MainActivity extends AppCompatActivity {
 
         File filesDir = this.getFilesDir();
         File isInitialized = new File(filesDir, "isInitialized.tmp");
+        List<String> list= Arrays.asList(filesDir.list());
+        for(String string : list){
+            Log.e("STRING", string);
+        }
+
         try {
             if(isInitialized.createNewFile()){
                 AssetManager am = this.getAssets();
