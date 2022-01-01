@@ -2,7 +2,7 @@
     <string name="app_name">madcamp-pj1</string>
     <string name="title_home">Contact</string>
     <string name="title_gallery">Gallery</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_schedule">Schedule</string>
     <string name="confirm_button_text">확인</string>
     <string name="delete_button_text">삭제</string>
     <string name="hint"><font size="15">이름을 입력해주세요</font></string>

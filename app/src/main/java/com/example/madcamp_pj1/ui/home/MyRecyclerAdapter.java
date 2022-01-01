@@ -1,4 +1,4 @@
-package com.example.madcamp_pj1;
+package com.example.madcamp_pj1.ui.home;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.madcamp_pj1.R;
 
 import java.util.ArrayList;
 

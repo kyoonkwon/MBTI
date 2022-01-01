@@ -1,11 +1,8 @@
-package com.example.madcamp_pj1;
+package com.example.madcamp_pj1.ui.home;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.provider.ContactsContract;
 
 public class FriendItem implements Parcelable{
     String name;

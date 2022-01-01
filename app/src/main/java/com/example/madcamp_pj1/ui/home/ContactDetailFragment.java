@@ -1,5 +1,6 @@
 package com.example.madcamp_pj1.ui.home;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,15 +13,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
-import com.example.madcamp_pj1.FriendItem;
 import com.example.madcamp_pj1.R;
-import com.example.madcamp_pj1.ui.gallery.BigFragment;
-import com.example.madcamp_pj1.ui.gallery.GalleryFragment;
 
 import java.util.List;
 
@@ -33,6 +31,18 @@ public class ContactDetailFragment extends Fragment {
     private TextView name;
     private TextView phone;
 
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                backToParentFragment();
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
+    }
 
     public static ContactDetailFragment newInstance() {
         return new ContactDetailFragment();
@@ -120,4 +130,6 @@ public class ContactDetailFragment extends Fragment {
             //backToParentFragment();
         }
     }
+
+
 }

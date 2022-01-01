@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#FFF8F8"
+    android:layout_marginLeft="5sp"
+    android:layout_marginRight="5sp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="5sp"
+        android:weightSum="10">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="7"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/itemScheduleTime"
+                android:layout_width="match_parent"
+                android:layout_height="15sp"
+                android:textSize="12sp">
+            </TextView>
+            <TextView
+                android:id="@+id/itemScheduleName"
+                android:layout_width="match_parent"
+                android:textSize="16sp"
+                android:layout_height="35sp">
+            </TextView>
+
+
+        </LinearLayout>
+        <Switch
+            android:id="@+id/itemScheduleSwitch"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:scaleY="1.3"
+            android:scaleX="1.3"
+            android:layout_weight="1.5"
+            android:checked="false"
+            android:layout_gravity="center"
+            tools:ignore="UseSwitchCompatOrMaterialXml">
+        </Switch>
+
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginHorizontal="10dp"
+        android:background="#eee"/>
+</LinearLayout>
