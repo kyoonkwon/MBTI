@@ -1,7 +1,6 @@
 package com.example.madcamp_pj1;
 
 import android.Manifest;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.pm.PackageManager;
@@ -16,39 +15,40 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
-
-import com.example.madcamp_pj1.ui.gallery.BigFragment;
-import com.example.madcamp_pj1.ui.home.HomeFragment;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.madcamp_pj1.ui.gallery.MemoFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+    }
+
     @Override
     public void onBackPressed() {
         List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
-        for(Fragment fragment : fragmentList){
+        for (Fragment fragment : fragmentList) {
             List<Fragment> childFragments = fragment.getChildFragmentManager().getFragments();
-            for(Fragment childFragment : childFragments){
-                if(childFragment instanceof BigFragment){
-                    ((BigFragment) childFragment).onBackPressed();
+            for (Fragment childFragment : childFragments) {
+                if (childFragment instanceof MemoFragment) {
+                    ((MemoFragment) childFragment).onBackPressed();
                     return;
                 }
             }
@@ -60,6 +60,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AssetManager am2 = this.getAssets();
+        try {
+            List<String> list = Arrays.asList(am2.list(""));
+            for (String string : list) {
+                Log.e("FILE", string);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
@@ -73,39 +82,39 @@ public class MainActivity extends AppCompatActivity {
 
         File filesDir = this.getFilesDir();
         File isInitialized = new File(filesDir, "isInitialized.tmp");
+
         try {
-            if(isInitialized.createNewFile()){
+            if (isInitialized.createNewFile()) {
                 AssetManager am = this.getAssets();
-                for(int i = 1; i<21; ++i){
-                    File file = new File(filesDir, "img" + i + ".png");
-                    BufferedInputStream buf = new BufferedInputStream(am.open("img"+i+".png"));
-                    Bitmap bitmap = BitmapFactory.decodeStream(buf);
-                    FileOutputStream out = new FileOutputStream(file);
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
-                    out.flush();
-                    out.close();
+                for (int i = 1; i < 21; ++i) {
+                    try {
+                        File file = new File(filesDir, "img" + i + ".png");
+                        BufferedInputStream buf = new BufferedInputStream(am.open("img" + i + ".png"));
+                        Bitmap bitmap = BitmapFactory.decodeStream(buf);
+                        FileOutputStream out = new FileOutputStream(file);
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+                        out.flush();
+                        out.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED){
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
             String[] permissions = new String[]{Manifest.permission.READ_CONTACTS};
             ActivityCompat.requestPermissions(this, permissions, 100);
         }
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_CONTACTS) != PackageManager.PERMISSION_GRANTED){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
             String[] permissions = new String[]{Manifest.permission.WRITE_CONTACTS};
             ActivityCompat.requestPermissions(this, permissions, 100);
         }
 
 
-
-    }
-
-    public static void hideSoftKeyboard(Activity activity) {
-        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
 
     @Override

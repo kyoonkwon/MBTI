@@ -41,52 +41,39 @@ import static android.app.Activity.RESULT_OK;
 
 public class GalleryFragment extends Fragment {
 
-    final int GALLERY_REQUEST = 101;
-    final int CAMERA_REQUEST = 111;
-    final int CAMERA_BUTTON_POSITION = 0;
+    private static final int GALLERY_REQUEST = 101;
+    private static final int CAMERA_REQUEST = 111;
+    private static final int CAMERA_BUTTON_POSITION = 0;
 
     private GridView m_grid;
     private GalleryAdapter m_gallAdt;
 
-    private class OnPinchListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
-        @Override
-        public boolean onScale(ScaleGestureDetector detector) {
-            float scaleFactor = detector.getScaleFactor();
-            int colNumDif = -1 * (int) ((scaleFactor-1) * 12);
-            int newColNum = m_grid.getNumColumns() + colNumDif;
-            if(newColNum <= 1) m_grid.setNumColumns(1);
-            else if(newColNum >= m_gallAdt.getCount()) m_grid.setNumColumns(m_gallAdt.getCount());
-            else m_grid.setNumColumns(newColNum);
-            return true;
-        }
-    }
-
-    private void getGalleryPermission(Activity activity, Context context){
+    private void getGalleryPermission(Activity activity, Context context) {
         String temp = "";
         int permissionForGalleryRead = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE);
-        if(permissionForGalleryRead != PackageManager.PERMISSION_GRANTED)
+        if (permissionForGalleryRead != PackageManager.PERMISSION_GRANTED)
             temp += Manifest.permission.READ_EXTERNAL_STORAGE + " ";
 
         int permissionForGalleryWrite = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        if(permissionForGalleryWrite != PackageManager.PERMISSION_GRANTED)
+        if (permissionForGalleryWrite != PackageManager.PERMISSION_GRANTED)
             temp += Manifest.permission.WRITE_EXTERNAL_STORAGE + " ";
         if (!temp.isEmpty())
             ActivityCompat.requestPermissions(activity, temp.trim().split(" "), 1);
     }
 
-    private void getCameraPermission(Activity activity, Context context){
+    private void getCameraPermission(Activity activity, Context context) {
         String temp = "";
         int permissionForCamera = ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA);
-        if(permissionForCamera != PackageManager.PERMISSION_GRANTED)
+        if (permissionForCamera != PackageManager.PERMISSION_GRANTED)
             temp = Manifest.permission.CAMERA;
-        if(!temp.isEmpty())
+        if (!temp.isEmpty())
             ActivityCompat.requestPermissions(activity, temp.trim().split(" "), 1);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if(requestCode == GALLERY_REQUEST && resultCode == RESULT_OK){
-            try{
+        if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK) {
+            try {
                 InputStream is = getContext().getContentResolver().openInputStream(data.getData());
                 Bitmap bm = BitmapFactory.decodeStream(is);
                 is.close();
@@ -103,10 +90,10 @@ public class GalleryFragment extends Fragment {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        } else if(requestCode == CAMERA_REQUEST && resultCode == RESULT_OK){
+        } else if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
             try {
                 Bundle extras = data.getExtras();
-                Bitmap bm = (Bitmap)extras.get("data");
+                Bitmap bm = (Bitmap) extras.get("data");
 
                 File filesDir = getActivity().getFilesDir();
                 File file = new File(filesDir, "img" + m_gallAdt.getCount() + ".png");
@@ -124,12 +111,12 @@ public class GalleryFragment extends Fragment {
         }
     }
 
-    public void removeItemInAdapter(int position){
+    public void removeItemInAdapter(int position) {
         m_gallAdt.deleteItem(position);
         refresh();
     }
 
-    public void refresh(){
+    public void refresh() {
         m_gallAdt.notifyDataSetChanged();
         m_grid.setAdapter(m_gallAdt);
     }
@@ -138,12 +125,12 @@ public class GalleryFragment extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        MainActivity activity = (MainActivity)getActivity();
+        MainActivity activity = (MainActivity) getActivity();
         Context context = container.getContext();
 
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_gallery, container, false);
 
-        m_grid = (GridView) rootView.findViewById(R.id.grid_gallery);
+        m_grid = rootView.findViewById(R.id.grid_gallery);
         OnPinchListener onPinchListener = new OnPinchListener();
         ScaleGestureDetector scaleGestureDetector = new ScaleGestureDetector(context, onPinchListener);
         m_grid.setOnTouchListener((v, event) -> {
@@ -152,7 +139,7 @@ public class GalleryFragment extends Fragment {
         });
 
         m_grid.setOnItemClickListener((parent, view, position, id) -> {
-            if(position == CAMERA_BUTTON_POSITION) {
+            if (position == CAMERA_BUTTON_POSITION) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity);
                 builder.setTitle("이미지 가져오기");
                 builder.setMessage("어디서 가져올지 정하세용");
@@ -179,12 +166,12 @@ public class GalleryFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putInt("position", position);
 
-                BigFragment bigFragment = new BigFragment();
-                bigFragment.setArguments(bundle);
+                MemoFragment memoFragment = new MemoFragment();
+                memoFragment.setArguments(bundle);
 
                 getParentFragmentManager()
                         .beginTransaction()
-                        .add(R.id.nav_host_fragment, bigFragment)
+                        .add(R.id.nav_host_fragment, memoFragment)
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                         .commit();
             }
@@ -193,7 +180,7 @@ public class GalleryFragment extends Fragment {
         int size = Device.getGalleryColumnWidth(activity);
         m_gallAdt = new GalleryAdapter(context, size);
 
-        try{
+        try {
             AssetManager am = context.getAssets();
             BufferedInputStream buf;
             Bitmap bitmap;
@@ -203,15 +190,14 @@ public class GalleryFragment extends Fragment {
             buf.close();
 
             int count = 1;
-            while (true){
+            while (true) {
                 File filesDir = getActivity().getFilesDir();
                 File file = new File(filesDir, "img" + count + ".png");
-                if(file.exists()){
+                if (file.exists()) {
                     bitmap = BitmapFactory.decodeFile(file.getPath());
                     m_gallAdt.setItem(bitmap);
                     count++;
-                }
-                else break;
+                } else break;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -220,5 +206,18 @@ public class GalleryFragment extends Fragment {
         m_grid.setAdapter(m_gallAdt);
 
         return rootView;
+    }
+
+    private class OnPinchListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+        @Override
+        public boolean onScale(ScaleGestureDetector detector) {
+            float scaleFactor = detector.getScaleFactor();
+            int colNumDif = -1 * (int) ((scaleFactor - 1) * 12);
+            int newColNum = m_grid.getNumColumns() + colNumDif;
+            if (newColNum <= 1) m_grid.setNumColumns(1);
+            else if (newColNum >= m_gallAdt.getCount()) m_grid.setNumColumns(m_gallAdt.getCount());
+            else m_grid.setNumColumns(newColNum);
+            return true;
+        }
     }
 }

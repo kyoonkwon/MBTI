@@ -7,7 +7,7 @@ import android.view.Display;
 
 import androidx.annotation.RequiresApi;
 
-import static android.os.Build.VERSION_CODES.*;
+import static android.os.Build.VERSION_CODES.JELLY_BEAN_MR1;
 
 public class Device {
     @RequiresApi(api = JELLY_BEAN_MR1)
@@ -26,7 +26,7 @@ public class Device {
         res = activity.getResources();
         int numOfColumns = res.getInteger(com.example.madcamp_pj1.R.integer.gallery_num_of_columns);
         int horizontalSpacing = (int) (res.getDimension(com.example.madcamp_pj1.R.dimen.gallery_grid_spacing) / res.getDisplayMetrics().density);
-        int size = (width - (numOfColumns+1) * horizontalSpacing) / numOfColumns;
+        int size = (width - (numOfColumns + 1) * horizontalSpacing) / numOfColumns;
         return size;
     }
 

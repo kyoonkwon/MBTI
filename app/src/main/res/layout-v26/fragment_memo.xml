@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:clickable="true"
+    tools:context=".MainActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbarSize="@dimen/big_image_padding"
+        android:scrollbarStyle="insideInset"
+        android:scrollbarThumbVertical="@color/purple_500"
+        android:scrollbarTrackVertical="@color/white"
+        android:verticalScrollbarPosition="right"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/memo_constraint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/big_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:layout_marginLeft="@dimen/big_image_padding"
+                android:layout_marginRight="@dimen/big_image_padding"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+            <Button
+                android:id="@+id/api_button"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height"
+                android:layout_marginLeft="@dimen/big_image_padding"
+                android:layout_marginRight="@dimen/big_image_padding"
+                android:text="@string/OCR_button"
+                android:visibility="visible"
+                app:layout_constraintTop_toBottomOf="@+id/big_image" />
+
+            <Button
+                android:id="@+id/loading_button"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height"
+                android:layout_marginLeft="@dimen/big_image_padding"
+                android:layout_marginRight="@dimen/big_image_padding"
+                android:clickable="false"
+                android:text="@string/loading_text"
+                android:visibility="invisible"
+                app:layout_constraintTop_toBottomOf="@+id/big_image" />
+
+            <TextView
+                android:id="@+id/OCR_text"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:layout_marginTop="@dimen/big_image_padding"
+                android:textSize="6pt"
+                android:visibility="invisible"
+                android:layout_marginLeft="@dimen/big_image_padding"
+                android:layout_marginRight="@dimen/big_image_padding"
+                app:layout_constraintLeft_toRightOf="@id/chat_bubble"
+                app:layout_constraintTop_toBottomOf="@+id/big_image"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="6pt"
+                android:autoSizeMaxTextSize="10pt"
+                />
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/ic_baseline_chat_bubble_outline_24"
+                android:id="@+id/chat_bubble"
+                app:layout_constraintLeft_toLeftOf="@id/big_image"
+                app:layout_constraintTop_toBottomOf="@id/big_image"
+                android:visibility="invisible"
+                />
+
+            <EditText
+                android:id="@+id/memo_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/big_image_padding"
+                android:layout_marginTop="@dimen/big_image_padding"
+                android:layout_marginRight="@dimen/big_image_padding"
+                android:layout_marginBottom="@dimen/big_image_padding"
+                app:layout_constraintTop_toBottomOf="@+id/api_button"
+                app:layout_constraintLeft_toLeftOf="@+id/api_button"
+                android:inputType="text"
+                android:hint="메모하기"
+                android:background="@drawable/bg_edit_text"
+                />
+
+            <Button
+                android:id="@+id/confirm_button"
+                android:layout_width="@dimen/button_width"
+                android:layout_height="@dimen/button_height"
+                android:layout_marginRight="@dimen/button_margin"
+                android:layout_marginBottom="@dimen/big_image_padding"
+                android:text="@string/confirm_button_text"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/memo_edit_text" />
+
+            <Button
+                android:id="@+id/delete_button"
+                android:layout_width="@dimen/button_width"
+                android:layout_height="@dimen/button_height"
+                android:layout_marginLeft="@dimen/button_margin"
+                android:layout_marginBottom="@dimen/big_image_padding"
+                android:text="@string/delete_button_text"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/memo_edit_text" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
