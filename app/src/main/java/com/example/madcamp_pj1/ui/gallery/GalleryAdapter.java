@@ -9,13 +9,14 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.example.madcamp_pj1.R;
+
 import java.util.ArrayList;
 
-public class GalleryAdapter extends BaseAdapter{
-    private Context m_context;
-    private ArrayList<GalleryItem>  m_array;
-
+public class GalleryAdapter extends BaseAdapter {
+    private final Context m_context;
+    private final ArrayList<GalleryItem> m_array;
     public int imgSize;
+
     public GalleryAdapter(Context context, int size) {
         this.imgSize = size;
         this.m_context = context;
@@ -49,15 +50,15 @@ public class GalleryAdapter extends BaseAdapter{
         return convertView;
     }
 
-    public Bitmap createThumbnail(Bitmap bitmap){
+    public Bitmap createThumbnail(Bitmap bitmap) {
         int height = bitmap.getHeight();
         int width = bitmap.getWidth();
 
-        if(height > width)
-            bitmap = Bitmap.createBitmap(bitmap, 0, (height - width)/2, width, width);
+        if (height > width)
+            bitmap = Bitmap.createBitmap(bitmap, 0, (height - width) / 2, width, width);
         else
-            bitmap = Bitmap.createBitmap(bitmap, (width - height)/2, 0, height, height);
-        bitmap = Bitmap.createScaledBitmap(bitmap, imgSize, imgSize,true);
+            bitmap = Bitmap.createBitmap(bitmap, (width - height) / 2, 0, height, height);
+        bitmap = Bitmap.createScaledBitmap(bitmap, imgSize, imgSize, true);
 
         return bitmap;
     }
@@ -66,7 +67,7 @@ public class GalleryAdapter extends BaseAdapter{
         this.m_array.add(new GalleryItem(bitmap));
     }
 
-    public void deleteItem(int position){
+    public void deleteItem(int position) {
         this.m_array.remove(position);
     }
 

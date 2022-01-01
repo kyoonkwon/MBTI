@@ -11,7 +11,6 @@ import java.security.NoSuchAlgorithmException;
 
 /**
  * Provides utility logic for getting the app's SHA1 signature. Used with restricted API keys.
- *
  */
 public class PackageManagerUtils {
 
@@ -21,7 +20,7 @@ public class PackageManagerUtils {
      * @param packageName Identifies the APK whose signature should be extracted.
      * @return a lowercase, hex-encoded
      */
-    public static String getSignature( PackageManager pm, String packageName) {
+    public static String getSignature(PackageManager pm, String packageName) {
         try {
             PackageInfo packageInfo = pm.getPackageInfo(packageName, PackageManager.GET_SIGNATURES);
             if (packageInfo == null

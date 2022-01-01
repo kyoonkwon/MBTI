@@ -29,11 +29,11 @@
                 android:id="@+id/big_image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/big_image_padding"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="@dimen/big_image_padding"
                 android:adjustViewBounds="true"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_marginLeft="@dimen/big_image_padding"
+                android:layout_marginRight="@dimen/big_image_padding"
+                app:layout_constraintTop_toTopOf="parent"
+                />
 
             <Button
                 android:id="@+id/api_button"
@@ -60,29 +60,27 @@
                 android:id="@+id/OCR_text"
                 android:layout_width="match_parent"
                 android:layout_height="400dp"
-                android:layout_marginStart="30dp"
-                android:layout_marginLeft="30dp"
                 android:layout_marginTop="@dimen/big_image_padding"
-                android:layout_marginEnd="@dimen/big_image_padding"
-                android:layout_marginRight="@dimen/big_image_padding"
-                android:autoSizeMaxTextSize="10pt"
-                android:autoSizeMinTextSize="6pt"
-                android:autoSizeTextType="uniform"
-                android:textColor="@color/black"
                 android:textSize="6pt"
                 android:visibility="invisible"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/big_image" />
+                android:layout_marginLeft="@dimen/big_image_padding"
+                android:layout_marginRight="@dimen/big_image_padding"
+                app:layout_constraintLeft_toRightOf="@id/chat_bubble"
+                app:layout_constraintTop_toBottomOf="@+id/big_image"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="6pt"
+                android:autoSizeMaxTextSize="10pt"
+                />
 
             <ImageView
-                android:id="@+id/chat_bubble"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginTop="10dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:background="@drawable/ic_baseline_chat_bubble_outline_24"
+                android:id="@+id/chat_bubble"
+                app:layout_constraintLeft_toLeftOf="@id/big_image"
+                app:layout_constraintTop_toBottomOf="@id/big_image"
                 android:visibility="invisible"
-                app:layout_constraintLeft_toLeftOf="@id/OCR_text"
-                app:layout_constraintTop_toTopOf="@id/OCR_text" />
+                />
 
             <EditText
                 android:id="@+id/memo_edit_text"
@@ -92,11 +90,12 @@
                 android:layout_marginTop="@dimen/big_image_padding"
                 android:layout_marginRight="@dimen/big_image_padding"
                 android:layout_marginBottom="@dimen/big_image_padding"
-                android:background="@drawable/bg_edit_text"
-                android:hint="메모하기"
-                android:inputType="text"
+                app:layout_constraintTop_toBottomOf="@+id/api_button"
                 app:layout_constraintLeft_toLeftOf="@+id/api_button"
-                app:layout_constraintTop_toBottomOf="@+id/api_button" />
+                android:inputType="text"
+                android:hint="메모하기"
+                android:background="@drawable/bg_edit_text"
+                />
 
             <Button
                 android:id="@+id/confirm_button"

@@ -30,14 +30,28 @@ import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 public class getOCR {
-    private final String API_KEY = "AIzaSyCeuPrkfQKVBss-YE9LMp1wL9vZTJB7bfE";
     private static final String ANDROID_CERT_HEADER = "X-Android-Cert";
     private static final String ANDROID_PACKAGE_HEADER = "X-Android-Package";
     private static final int MAX_TEXT_RESULTS = 10;
+    private static final String API_KEY = "AIzaSyCeuPrkfQKVBss-YE9LMp1wL9vZTJB7bfE";
+    private final Activity m_activity;
 
-    private Activity m_activity;
-    public getOCR(Activity activity){
+    public getOCR(Activity activity) {
         m_activity = activity;
+    }
+
+    private static String convertResponseToString(BatchAnnotateImagesResponse response) {
+        StringBuilder message = new StringBuilder();
+
+        List<EntityAnnotation> textAnnotations = response.getResponses().get(0).getTextAnnotations();
+        if (textAnnotations != null) {
+            EntityAnnotation textAnnotation = textAnnotations.get(0);
+            message.append(String.format(Locale.US, "%s", textAnnotation.getDescription()));
+        } else {
+            return null;
+        }
+
+        return message.toString();
     }
 
     private Vision.Images.Annotate prepareAnnotationRequest(Bitmap bitmap) throws IOException {
@@ -46,7 +60,6 @@ public class getOCR {
 
         VisionRequestInitializer requestInitializer =
                 new VisionRequestInitializer(API_KEY) {
-                    // @Override
                     protected void initializedVisionRequest(VisionRequest<?> visionRequest) throws IOException {
                         super.initializeVisionRequest(visionRequest);
 
@@ -97,9 +110,25 @@ public class getOCR {
         return annotateRequest;
     }
 
+    public String callCloudVision(final Bitmap bitmap) {
+        try {
+            Log.e("START", "CLOUDVISION");
+            AsyncTask<Object, Void, String> textDetectionTask = new TextDetectionTask((MainActivity) m_activity, prepareAnnotationRequest(bitmap));
+            textDetectionTask.execute();
+            return textDetectionTask.get();
+        } catch (IOException e) {
+            e.getMessage();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     private static class TextDetectionTask extends AsyncTask<Object, Void, String> {
         private final WeakReference<MainActivity> mainActivityWeakReference;
-        private Vision.Images.Annotate mRequest;
+        private final Vision.Images.Annotate mRequest;
 
         TextDetectionTask(MainActivity activity, Vision.Images.Annotate annotate) {
             mainActivityWeakReference = new WeakReference<>(activity);
@@ -108,7 +137,7 @@ public class getOCR {
 
         @Override
         protected String doInBackground(Object... params) {
-            try{
+            try {
                 Log.d("TAG", "created Cloud Vision request object, sending request");
                 BatchAnnotateImagesResponse response = mRequest.execute();
                 return convertResponseToString(response);
@@ -120,33 +149,5 @@ public class getOCR {
             }
             return "Cloud Vision API request failed. Check logs for details.";
         }
-    }
-    private static String convertResponseToString(BatchAnnotateImagesResponse response) {
-        StringBuilder message = new StringBuilder();
-
-        List <EntityAnnotation> textAnnotations = response.getResponses().get(0).getTextAnnotations();
-        if (textAnnotations != null) {
-            EntityAnnotation textAnnotation = textAnnotations.get(0);
-            message.append(String.format(Locale.US, "%s",  textAnnotation.getDescription()));
-        } else {
-           return null;
-        }
-
-        return message.toString();
-    }
-    public String callCloudVision(final Bitmap bitmap) {
-        try {
-            Log.e("START", "CLOUDVISION");
-            AsyncTask<Object, Void, String> textDetectionTask = new TextDetectionTask((MainActivity)m_activity, prepareAnnotationRequest(bitmap));
-            textDetectionTask.execute();
-            return textDetectionTask.get();
-        } catch (IOException e) {
-            e.getMessage();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 }

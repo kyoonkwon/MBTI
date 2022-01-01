@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -12,19 +11,19 @@
         android:id="@+id/grid_gallery"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/gallery_grid_spacing"
+        android:horizontalSpacing="@dimen/gallery_grid_spacing"
+        android:numColumns="@integer/gallery_num_of_columns"
+        android:scrollbarSize="@dimen/gallery_grid_spacing"
+        android:scrollbarStyle="insideInset"
+        android:scrollbarThumbVertical="@color/purple_500"
+        android:scrollbarTrackVertical="@color/white"
+        android:verticalScrollbarPosition="right"
+        android:verticalSpacing="@dimen/gallery_grid_spacing"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginLeft="@dimen/gallery_grid_spacing"
-        android:verticalSpacing="@dimen/gallery_grid_spacing"
-        android:horizontalSpacing="@dimen/gallery_grid_spacing"
-        android:numColumns="@integer/gallery_num_of_columns"
-        android:scrollbarStyle="insideInset"
-        android:verticalScrollbarPosition="right"
-        android:scrollbarSize="@dimen/gallery_grid_spacing"
-        android:scrollbarThumbVertical="@color/purple_500"
-        android:scrollbarTrackVertical="@color/white" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
