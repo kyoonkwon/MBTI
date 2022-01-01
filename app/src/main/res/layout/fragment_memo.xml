@@ -93,7 +93,7 @@
                 android:layout_marginRight="@dimen/big_image_padding"
                 android:layout_marginBottom="@dimen/big_image_padding"
                 android:background="@drawable/bg_edit_text"
-                android:hint="메모하기"
+                android:hint=" 메모하기"
                 android:inputType="text"
                 app:layout_constraintLeft_toLeftOf="@+id/api_button"
                 app:layout_constraintTop_toBottomOf="@+id/api_button" />

@@ -108,11 +108,12 @@ public class MemoFragment extends Fragment implements OnBackPressedListener {
                 Handler handler = new Handler();
                 handler.postDelayed(() -> {
                     getOCR getocr = new getOCR(getActivity());
+                    String string = "       ";
                     String OCRResult = getocr.callCloudVision(bitmap);
                     if (OCRResult == null) {
                         OCRResult = "글귀가 검색되지 않습니다.";
                     }
-
+                    OCRResult = string.concat(OCRResult);
                     ImageView im = rootView.findViewById(R.id.chat_bubble);
                     im.setVisibility(View.VISIBLE);
 
