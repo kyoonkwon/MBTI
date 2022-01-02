@@ -170,6 +170,8 @@ public class MemoFragment extends Fragment implements OnBackPressedListener {
             while (true) {
                 File oldFile = new File(filesDir, "img" + count + ".png");
                 File oldText = new File(filesDir, "img" + count + ".txt");
+                File oldThumbnail = new File(filesDir, "thumbnail" + count + "png");
+                oldThumbnail.delete();
                 if (oldText.exists()) {
                     File newText = new File(filesDir, "img" + (count - 1) + ".txt");
                     oldText.renameTo(newText);

@@ -58,7 +58,6 @@
 
             <TextView
                 android:id="@+id/OCR_text"
-
                 android:layout_width="match_parent"
                 android:layout_height="450dp"
                 android:layout_marginStart="@dimen/big_image_padding"
@@ -71,6 +70,7 @@
                 android:paddingStart="30dp"
                 android:paddingTop="85dp"
                 android:paddingEnd="30dp"
+                android:paddingBottom="35dp"
                 android:textColor="@color/black"
                 android:visibility="invisible"
                 app:layout_constraintLeft_toLeftOf="parent"

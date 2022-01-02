@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -34,7 +35,9 @@ import com.example.madcamp_pj1.ui.method.Device;
 
 import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
 import static android.app.Activity.RESULT_OK;
@@ -70,12 +73,14 @@ public class GalleryFragment extends Fragment {
             ActivityCompat.requestPermissions(activity, temp.trim().split(" "), 1);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        Bitmap bm = null;
         if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK) {
             try {
                 InputStream is = getContext().getContentResolver().openInputStream(data.getData());
-                Bitmap bm = BitmapFactory.decodeStream(is);
+                bm = BitmapFactory.decodeStream(is);
                 is.close();
 
                 File filesDir = getActivity().getFilesDir();
@@ -84,8 +89,6 @@ public class GalleryFragment extends Fragment {
                 bm.compress(Bitmap.CompressFormat.PNG, 100, out);
                 out.flush();
                 out.close();
-
-                m_gallAdt.setItem(bm);
                 refresh();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -93,7 +96,7 @@ public class GalleryFragment extends Fragment {
         } else if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
             try {
                 Bundle extras = data.getExtras();
-                Bitmap bm = (Bitmap) extras.get("data");
+                bm = (Bitmap) extras.get("data");
 
                 File filesDir = getActivity().getFilesDir();
                 File file = new File(filesDir, "img" + m_gallAdt.getCount() + ".png");
@@ -102,12 +105,27 @@ public class GalleryFragment extends Fragment {
                 bm.compress(Bitmap.CompressFormat.PNG, 100, out);
                 out.flush();
                 out.close();
-
-                m_gallAdt.setItem(bm);
                 refresh();
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+        try {
+            File filesDir = getActivity().getFilesDir();
+            File thumbnailOut = new File(filesDir, "thumbnail" + m_gallAdt.getCount() + ".png");
+            FileOutputStream out = null;
+
+            out = new FileOutputStream(thumbnailOut);
+
+            Bitmap thumbnail = Device.createThumbnail(bm, getActivity());
+            thumbnail.compress(Bitmap.CompressFormat.PNG, 100, out);
+            out.flush();
+            out.close();
+            m_gallAdt.setItem(thumbnail);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -121,7 +139,48 @@ public class GalleryFragment extends Fragment {
         m_grid.setAdapter(m_gallAdt);
     }
 
-    @SuppressLint("ClickableViewAccessibility")
+    private void thumbnailOnClick(int position) {
+        Bundle bundle = new Bundle();
+        bundle.putInt("position", position);
+
+        MemoFragment memoFragment = new MemoFragment();
+        memoFragment.setArguments(bundle);
+
+        getParentFragmentManager()
+                .beginTransaction()
+                .add(R.id.nav_host_fragment, memoFragment)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .commit();
+    }
+
+    private void cameraOnClick() {
+        Activity activity = getActivity();
+        Context context = getContext();
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle("이미지 가져오기");
+        builder.setMessage("어디서 가져올지 정하세용");
+
+        builder.setNegativeButton("카메라", (dialog, which) -> {
+            getCameraPermission(activity, context);
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(intent, CAMERA_REQUEST);
+        });
+
+        builder.setPositiveButton("갤러리", (dialog, which) -> {
+            getGalleryPermission(activity, context);
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(intent, GALLERY_REQUEST);
+        });
+
+        builder.setNeutralButton("취소", (dialog, which) -> Toast.makeText(context, "Cancel Click", Toast.LENGTH_SHORT).show());
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    @SuppressLint({"ClickableViewAccessibility", "WrongThread"})
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -139,46 +198,14 @@ public class GalleryFragment extends Fragment {
         });
 
         m_grid.setOnItemClickListener((parent, view, position, id) -> {
-            if (position == CAMERA_BUTTON_POSITION) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                builder.setTitle("이미지 가져오기");
-                builder.setMessage("어디서 가져올지 정하세용");
-
-                builder.setNegativeButton("카메라", (dialog, which) -> {
-                    getCameraPermission(activity, context);
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(intent, CAMERA_REQUEST);
-                });
-
-                builder.setPositiveButton("갤러리", (dialog, which) -> {
-                    getGalleryPermission(activity, context);
-                    Intent intent = new Intent();
-                    intent.setType("image/*");
-                    intent.setAction(Intent.ACTION_GET_CONTENT);
-                    startActivityForResult(intent, GALLERY_REQUEST);
-                });
-
-                builder.setNeutralButton("취소", (dialog, which) -> Toast.makeText(context, "Cancel Click", Toast.LENGTH_SHORT).show());
-
-                AlertDialog dialog = builder.create();
-                dialog.show();
-            } else {
-                Bundle bundle = new Bundle();
-                bundle.putInt("position", position);
-
-                MemoFragment memoFragment = new MemoFragment();
-                memoFragment.setArguments(bundle);
-
-                getParentFragmentManager()
-                        .beginTransaction()
-                        .add(R.id.nav_host_fragment, memoFragment)
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                        .commit();
-            }
+            if (position == CAMERA_BUTTON_POSITION)
+                cameraOnClick();
+            else
+                thumbnailOnClick(position);
         });
 
-        int size = Device.getGalleryColumnWidth(activity);
-        m_gallAdt = new GalleryAdapter(context, size);
+
+        m_gallAdt = new GalleryAdapter(context, activity);
 
         try {
             AssetManager am = context.getAssets();
@@ -192,7 +219,7 @@ public class GalleryFragment extends Fragment {
             int count = 1;
             while (true) {
                 File filesDir = getActivity().getFilesDir();
-                File file = new File(filesDir, "img" + count + ".png");
+                File file = new File(filesDir, "thumbnail" + count + ".png");
                 if (file.exists()) {
                     bitmap = BitmapFactory.decodeFile(file.getPath());
                     m_gallAdt.setItem(bitmap);
@@ -208,7 +235,22 @@ public class GalleryFragment extends Fragment {
         return rootView;
     }
 
+    private Bitmap createThumbnail(Bitmap bitmap, int imgSize) {
+        int height = bitmap.getHeight();
+        int width = bitmap.getWidth();
+
+        if (height > width)
+            bitmap = Bitmap.createBitmap(bitmap, 0, (height - width) / 2, width, width);
+        else
+            bitmap = Bitmap.createBitmap(bitmap, (width - height) / 2, 0, height, height);
+        bitmap = Bitmap.createScaledBitmap(bitmap, imgSize, imgSize, true);
+
+        return bitmap;
+    }
+
+
     private class OnPinchListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+        @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
         @Override
         public boolean onScale(ScaleGestureDetector detector) {
             float scaleFactor = detector.getScaleFactor();

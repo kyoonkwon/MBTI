@@ -66,6 +66,7 @@
                 android:paddingStart="30dp"
                 android:paddingTop="85dp"
                 android:paddingEnd="30dp"
+                android:textSize="6pt"
                 android:textColor="@color/black"
                 android:visibility="invisible"
                 app:layout_constraintLeft_toLeftOf="parent"
