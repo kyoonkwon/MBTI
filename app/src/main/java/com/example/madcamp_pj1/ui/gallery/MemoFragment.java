@@ -83,8 +83,6 @@ public class MemoFragment extends Fragment implements OnBackPressedListener {
                 text.setText(string);
                 text.setTextSize((float) (text.getTextSize() - 2));
 
-                ImageView im = rootView.findViewById(R.id.chat_bubble);
-                im.setVisibility(View.VISIBLE);
 
                 ConstraintSet constraintSet = new ConstraintSet();
                 constraintSet.clone((ConstraintLayout) text.getParent());
@@ -112,8 +110,6 @@ public class MemoFragment extends Fragment implements OnBackPressedListener {
                     if (OCRResult == null) {
                         OCRResult = "글귀가 검색되지 않습니다.";
                     }
-                    ImageView im = rootView.findViewById(R.id.chat_bubble);
-                    im.setVisibility(View.VISIBLE);
 
                     loading.setVisibility(View.INVISIBLE);
 
