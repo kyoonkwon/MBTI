@@ -69,7 +69,7 @@ public class MemoFragment extends Fragment implements OnBackPressedListener {
             try {
                 BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(textFile.getPath()), StandardCharsets.UTF_8), 500);
 
-                String string = "       ";
+                String string = "";
                 String str;
 
                 while ((str = br.readLine()) != null) {
@@ -81,7 +81,7 @@ public class MemoFragment extends Fragment implements OnBackPressedListener {
                 TextView text = rootView.findViewById(R.id.OCR_text);
                 text.setVisibility(View.VISIBLE);
                 text.setText(string);
-                text.setTextColor(0xff000000);
+                text.setTextSize((float) (text.getTextSize() - 2));
 
                 ImageView im = rootView.findViewById(R.id.chat_bubble);
                 im.setVisibility(View.VISIBLE);
@@ -108,12 +108,10 @@ public class MemoFragment extends Fragment implements OnBackPressedListener {
                 Handler handler = new Handler();
                 handler.postDelayed(() -> {
                     getOCR getocr = new getOCR(getActivity());
-                    String string = "       ";
                     String OCRResult = getocr.callCloudVision(bitmap);
                     if (OCRResult == null) {
                         OCRResult = "글귀가 검색되지 않습니다.";
                     }
-                    OCRResult = string.concat(OCRResult);
                     ImageView im = rootView.findViewById(R.id.chat_bubble);
                     im.setVisibility(View.VISIBLE);
 
@@ -122,7 +120,7 @@ public class MemoFragment extends Fragment implements OnBackPressedListener {
                     TextView text = rootView.findViewById(R.id.OCR_text);
                     text.setVisibility(View.VISIBLE);
                     text.setText(OCRResult);
-                    text.setTextColor(0xff000000);
+                    text.setTextSize((float) (text.getTextSize() - 2));
 
                     ConstraintSet constraintSet = new ConstraintSet();
                     constraintSet.clone((ConstraintLayout) text.getParent());

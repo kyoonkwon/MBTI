@@ -60,15 +60,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        AssetManager am2 = this.getAssets();
-        try {
-            List<String> list = Arrays.asList(am2.list(""));
-            for (String string : list) {
-                Log.e("FILE", string);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
