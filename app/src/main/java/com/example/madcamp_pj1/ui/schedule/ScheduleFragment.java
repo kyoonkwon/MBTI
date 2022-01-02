@@ -1,8 +1,11 @@
 package com.example.madcamp_pj1.ui.schedule;
 
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -19,18 +22,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.madcamp_pj1.MainActivity;
 import com.example.madcamp_pj1.R;
 
 import java.text.ParseException;
@@ -116,16 +123,16 @@ public class ScheduleFragment extends Fragment {
         scheduler.setImageDrawable(new BitmapDrawable(getResources(), schedulerBitmap));
         timerStart();
 
-        adapter = new ScheduleAdapter();
+        adapter = new ScheduleAdapter(getActivity());
         rview = view.findViewById(R.id.scheduleRecycler);
         rview.setAdapter(adapter);
         rview.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         schedules = new ArrayList<>();
         try {
-            schedules.add(new Schedule("잠자기", sdf.parse("00:00"), sdf.parse("11:00"), false));
-            schedules.add(new Schedule("점심먹기", sdf.parse("12:00"), sdf.parse("13:00"), true));
-            schedules.add(new Schedule("코딩하기", sdf.parse("14:00"), sdf.parse("18:00"), false));
+            schedules.add(new Schedule("잠자기", sdf.parse("01:36"), sdf.parse("11:00"), false));
+            schedules.add(new Schedule("점심먹기", sdf.parse("01:36"), sdf.parse("13:00"), true));
+            schedules.add(new Schedule("코딩하기", sdf.parse("01:37"), sdf.parse("18:00"), false));
             schedules.add(new Schedule("저녁먹기",  sdf.parse("18:30"), sdf.parse("20:00"), true));
             schedules.add(new Schedule("코딩또하기",  sdf.parse("20:00"), sdf.parse("23:59"), false));
 
