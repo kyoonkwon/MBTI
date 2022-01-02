@@ -1,5 +1,6 @@
 package com.example.madcamp_pj1.ui.gallery;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
@@ -10,17 +11,19 @@ import android.widget.ImageView;
 
 import com.example.madcamp_pj1.R;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class GalleryAdapter extends BaseAdapter {
     private final Context m_context;
+    private final Activity m_activity;
     private final ArrayList<GalleryItem> m_array;
-    public int imgSize;
 
-    public GalleryAdapter(Context context, int size) {
-        this.imgSize = size;
+
+    public GalleryAdapter(Context context, Activity activity) {
         this.m_context = context;
         this.m_array = new ArrayList<>();
+        this.m_activity = activity;
     }
 
     @Override
@@ -43,24 +46,12 @@ public class GalleryAdapter extends BaseAdapter {
         LayoutInflater inflater = (LayoutInflater) m_context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         convertView = inflater.inflate(R.layout.gallery_item, parent, false);
         ImageView imageView = convertView.findViewById(R.id.item_image);
+
+        File filesDir =m_activity.getFilesDir();
         Bitmap bitmap = getItemBitmap(position);
-        bitmap = createThumbnail(bitmap);
         imageView.setImageBitmap(bitmap);
 
         return convertView;
-    }
-
-    public Bitmap createThumbnail(Bitmap bitmap) {
-        int height = bitmap.getHeight();
-        int width = bitmap.getWidth();
-
-        if (height > width)
-            bitmap = Bitmap.createBitmap(bitmap, 0, (height - width) / 2, width, width);
-        else
-            bitmap = Bitmap.createBitmap(bitmap, (width - height) / 2, 0, height, height);
-        bitmap = Bitmap.createScaledBitmap(bitmap, imgSize, imgSize, true);
-
-        return bitmap;
     }
 
     public void setItem(Bitmap bitmap) {

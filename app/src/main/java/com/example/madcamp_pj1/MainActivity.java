@@ -8,6 +8,7 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -25,6 +27,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.madcamp_pj1.ui.gallery.MemoFragment;
+import com.example.madcamp_pj1.ui.method.Device;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.BufferedInputStream;
@@ -56,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     @SuppressLint("WrongThread")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +91,14 @@ public class MainActivity extends AppCompatActivity {
                         bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
                         out.flush();
                         out.close();
+
+                        File thumbnailOut = new File(filesDir, "thumbnail" + i + ".png");
+                        out = new FileOutputStream(thumbnailOut);
+                        Bitmap thumbnail = Device.createThumbnail(bitmap, this);
+                        thumbnail.compress(Bitmap.CompressFormat.PNG, 100, out);
+                        out.flush();
+                        out.close();
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
