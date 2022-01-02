@@ -40,7 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/button_height"
                 android:layout_marginLeft="17dp"
-                android:layout_marginRight="6dp"
+                android:layout_marginRight="17dp"
                 android:text="@string/OCR_button"
                 android:visibility="visible"
                 app:layout_constraintTop_toBottomOf="@+id/big_image" />
@@ -82,7 +82,7 @@
                 android:layout_height="200dp"
                 android:layout_marginLeft="17dp"
                 android:layout_marginTop="17dp"
-                android:layout_marginRight="@dimen/big_image_padding"
+                android:layout_marginRight="17dp"
                 android:layout_marginBottom="@dimen/big_image_padding"
                 android:background="@drawable/bg_edit_text"
                 android:gravity="top"
