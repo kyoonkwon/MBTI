@@ -2,6 +2,7 @@ package com.example.madcamp_pj1.ui.schedule;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -18,11 +19,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -47,7 +51,8 @@ public class ScheduleFragment extends Fragment {
     private TextView curScheduleView;
     Date currentTime;
     ArrayList<Schedule> schedules;
-    private String curSchedule;
+
+    ImageButton scheduleAddBtn;
 
     SimpleDateFormat hourFormat = new SimpleDateFormat("HH");
     SimpleDateFormat minFormat = new SimpleDateFormat("mm");
@@ -104,7 +109,6 @@ public class ScheduleFragment extends Fragment {
         scheduler = view.findViewById(R.id.scheduleTimebar);
         schedulerBitmap = Bitmap.createBitmap(canvasWidth, canvasHeight, Bitmap.Config.ARGB_8888);
         SchedulerCanvas = new Canvas(schedulerBitmap);
-        curSchedule = "";
         curScheduleView = view.findViewById(R.id.scheduleCurrnet);
         currentTime = Calendar.getInstance().getTime();
 
@@ -148,8 +152,33 @@ public class ScheduleFragment extends Fragment {
             writeSchedule(schedule);
         }
 
+        scheduleAddBtn = view.findViewById(R.id.scheduleAddBtn);
+        scheduleAddBtn.setOnClickListener(v -> showAddSchedule());
 
     }
+
+    private void showAddSchedule(){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.dialog_addschedule, null);
+        builder.setView(view);
+        builder.setPositiveButton("예",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(getContext(),"예를 선택했습니다.",Toast.LENGTH_LONG).show();
+                    }
+                });
+        builder.setNegativeButton("아니오",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(getContext(),"아니오를 선택했습니다.",Toast.LENGTH_LONG).show();
+                    }
+                });
+        builder.show();
+
+    }
+
     private void findCurrentSchedule(){
         String curSchedule = "일정 없음";
         for(Schedule schedule : schedules){
