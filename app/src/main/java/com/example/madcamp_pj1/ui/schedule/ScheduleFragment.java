@@ -1,7 +1,9 @@
 package com.example.madcamp_pj1.ui.schedule;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -11,6 +13,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +33,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.madcamp_pj1.R;
+import com.google.api.client.json.Json;
+import com.google.gson.Gson;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -58,6 +68,8 @@ public class ScheduleFragment extends Fragment {
     private ScheduleAdapter adapter;
     private TextView curScheduleView;
     private TimerTask timerTask;
+
+    SharedPreferences sharedPref;
 
     private void timerStart() {
         timerTask = new TimerTask() {
@@ -99,10 +111,11 @@ public class ScheduleFragment extends Fragment {
                 String endTime = result.getString("endTime");
                 Boolean isAlarm = result.getBoolean("alarm");
 
-                Log.i("log1", name + startTime + endTime + isAlarm);
+                //Log.i("log1 add Schedule", name + startTime + endTime + isAlarm);
                 try {
                     schedules.add(new Schedule(name, sdf.parse(startTime), sdf.parse(endTime), isAlarm));
                     Collections.sort(schedules);
+                    setArrayListPref(schedules);
                     adapter.notifyDataSetChanged();
                     reDraw();
                 } catch (ParseException e) {
@@ -153,6 +166,9 @@ public class ScheduleFragment extends Fragment {
 //            e.printStackTrace();
 //        }
 
+        //setArrayListPref(schedules);
+        schedules = getArrayListPref();
+        //Log.i("log1 schedules", schedules.get(0).toString());
 
         adapter.setScheduleList(schedules);
 
@@ -175,7 +191,76 @@ public class ScheduleFragment extends Fragment {
         scheduleAddBtn = view.findViewById(R.id.scheduleAddBtn);
         scheduleAddBtn.setOnClickListener(v -> new DialogFragment().show(getChildFragmentManager(), "dialog"));
 
+        adapter.setOnItemCLickListener(new ScheduleAdapter.OnItemClickListener() {
+            @Override
+            public void onDeleteClick(View v, int position) {
+                schedules.remove(position);
+                adapter.setScheduleList(schedules);
+                setArrayListPref(schedules);
+                reDraw();
+            }
 
+            @Override
+            public void onSwitchClick(View v, int position, boolean isChecked) {
+
+                Schedule s = adapter.getItem(position);
+                Log.i("log1 switch", s.getName());
+                s.setAlarm(isChecked);
+//                adapter.setScheduleItem(position, s);
+                schedules.set(position, s);
+//                adapter.setScheduleList(schedules);
+                setArrayListPref(schedules);
+            }
+        });
+
+    }
+
+    private void setArrayListPref(ArrayList<Schedule> schedules){
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        SharedPreferences.Editor editor = prefs.edit();
+        JSONArray jsonArray = new JSONArray();
+        for(int i=0;i<schedules.size();i++){
+            jsonArray.put(schedules.get(i).toJsonObject());
+        }
+        if(!schedules.isEmpty()){
+            Log.i("log1 save", jsonArray.toString());
+            editor.putString("schedules", jsonArray.toString());
+        }else{
+            editor.putString("schedules", null);
+        }
+        editor.apply();
+
+    }
+
+    private ArrayList<Schedule> getArrayListPref(){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        String json = prefs.getString("schedules", null);
+        ArrayList<Schedule> urls = new ArrayList<>();
+        //Log.i("log1", "get pref " + json);
+        if(json != null){
+            try {
+                JSONArray jsonArray = new JSONArray(json);
+
+                for (int i = 0; i< jsonArray.length();i++){
+
+                    JSONObject obj = (JSONObject) jsonArray.get(i);
+                    //Log.i("log1 load", obj.toString());
+
+                    Schedule s =new Schedule((String) obj.get("name"),
+                            sdf.parse((String) obj.get("startTime")),
+                            sdf.parse((String) obj.get("endTime")),
+                            obj.getBoolean("alarm"));
+                    //Log.i("log1 load", s.toString());
+                    urls.add(s);
+
+                }
+            } catch(JSONException | ParseException e){
+                Log.e("log1", String.valueOf(e));
+                e.printStackTrace();
+            }
+        }
+        return urls;
     }
 
 
@@ -183,7 +268,7 @@ public class ScheduleFragment extends Fragment {
 
         Paint paint = new Paint();
         paint.setColor(0xFFFFFFFF);
-        SchedulerCanvas.drawCircle(canvasWidth / 2, canvasHeight / 2, canvasHeight / 2 - 250, paint);
+        SchedulerCanvas.drawCircle(canvasWidth / 2, canvasHeight / 2, canvasHeight / 2 - 125, paint);
 
 
         int[] colors = {0xffffafb0, 0xffffafd8, 0xffeeb7b4, 0xfff2cfa5, 0xfffcffb0, 0xffaee4ff};
