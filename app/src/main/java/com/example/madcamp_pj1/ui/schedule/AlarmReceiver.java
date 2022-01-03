@@ -1,6 +1,5 @@
 package com.example.madcamp_pj1.ui.schedule;
 
-import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -20,7 +19,6 @@ import com.example.madcamp_pj1.MainActivity;
 import com.example.madcamp_pj1.R;
 
 import java.io.BufferedInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class AlarmReceiver extends BroadcastReceiver {
@@ -28,20 +26,16 @@ public class AlarmReceiver extends BroadcastReceiver {
     NotificationManager manager;
     NotificationCompat.Builder builder;
 
-
-    public AlarmReceiver(){
-    }
-
     @Override
     public void onReceive(Context context, Intent intent) {
 
         Intent intent2 = new Intent(context, MainActivity.class);
         String title = intent.getExtras().getString("title");
-        PendingIntent pendingIntent = PendingIntent.getActivity(context,title.hashCode(),intent2, PendingIntent.FLAG_UPDATE_CURRENT);
-        manager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, title.hashCode(), intent2, PendingIntent.FLAG_UPDATE_CURRENT);
+        manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         Log.e("ALARM", title);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            if(manager.getNotificationChannel(title) == null) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (manager.getNotificationChannel(title) == null) {
                 manager.createNotificationChannel(
                         new NotificationChannel(title, title, NotificationManager.IMPORTANCE_DEFAULT)
                 );
@@ -67,9 +61,5 @@ public class AlarmReceiver extends BroadcastReceiver {
         Log.e("ALARM", title);
         Notification notification = builder.build();
         manager.notify(title.hashCode(), notification);
-    }
-    void cancleNotification(int id){
-        NotificationManager notificationManager = null;
-        notificationManager.cancel(id);
     }
 }

@@ -10,7 +10,6 @@ import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -204,7 +203,6 @@ public class GalleryFragment extends Fragment {
                 thumbnailOnClick(position);
         });
 
-
         m_gallAdt = new GalleryAdapter(context, activity);
 
         try {
@@ -234,20 +232,6 @@ public class GalleryFragment extends Fragment {
 
         return rootView;
     }
-
-    private Bitmap createThumbnail(Bitmap bitmap, int imgSize) {
-        int height = bitmap.getHeight();
-        int width = bitmap.getWidth();
-
-        if (height > width)
-            bitmap = Bitmap.createBitmap(bitmap, 0, (height - width) / 2, width, width);
-        else
-            bitmap = Bitmap.createBitmap(bitmap, (width - height) / 2, 0, height, height);
-        bitmap = Bitmap.createScaledBitmap(bitmap, imgSize, imgSize, true);
-
-        return bitmap;
-    }
-
 
     private class OnPinchListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
         @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
