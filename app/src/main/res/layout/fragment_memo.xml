@@ -37,23 +37,23 @@
 
             <Button
                 android:id="@+id/api_button"
-                android:fontFamily="@font/pnm"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/button_height"
                 android:layout_marginLeft="17dp"
                 android:layout_marginRight="6dp"
+                android:fontFamily="@font/pnm"
                 android:text="@string/OCR_button"
                 android:visibility="visible"
                 app:layout_constraintTop_toBottomOf="@+id/big_image" />
 
             <Button
                 android:id="@+id/loading_button"
-                android:fontFamily="@font/pnm"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/button_height"
                 android:layout_marginLeft="17dp"
                 android:layout_marginRight="17dp"
                 android:clickable="false"
+                android:fontFamily="@font/pnm"
                 android:text="@string/loading_text"
                 android:visibility="invisible"
                 app:layout_constraintTop_toBottomOf="@+id/big_image" />
@@ -89,11 +89,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_marginLeft="17dp"
-                android:fontFamily="@font/pnm"
                 android:layout_marginTop="17dp"
                 android:layout_marginRight="@dimen/big_image_padding"
                 android:layout_marginBottom="@dimen/big_image_padding"
                 android:background="@drawable/bg_edit_text"
+                android:fontFamily="@font/pnm"
                 android:gravity="top"
                 android:hint="@string/memo"
                 android:inputType="text"
@@ -119,10 +119,10 @@
                 android:id="@+id/delete_button"
                 android:layout_width="@dimen/button_width"
                 android:layout_height="@dimen/button_height"
-                android:fontFamily="@font/pnm"
                 android:layout_marginLeft="@dimen/button_margin"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="@dimen/big_image_padding"
+                android:fontFamily="@font/pnm"
                 android:text="@string/delete_button_text"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/memo_edit_text" />

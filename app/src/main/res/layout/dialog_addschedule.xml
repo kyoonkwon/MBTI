@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16sp">
 
@@ -28,21 +28,21 @@
             android:id="@+id/dialogScheduleName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="4"
             android:fontFamily="@font/pnm"
             android:hint="코딩하기"
-            android:inputType="text"
-            android:layout_weight="4"/>
+            android:inputType="text" />
 
         <Switch
             android:id="@+id/dialog_alarm"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:scaleY="1.3"
-            android:scaleX="1.3"
+            android:layout_gravity="left"
             android:layout_weight="0.8"
             android:checked="false"
-            android:layout_gravity="left"
-            tools:ignore="UseSwitchCompatOrMaterialXml"/>
+            android:scaleX="1.3"
+            android:scaleY="1.3"
+            tools:ignore="UseSwitchCompatOrMaterialXml" />
 
     </LinearLayout>
 
@@ -67,14 +67,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="right"/>
+            android:gravity="right" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="~"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:text="~" />
 
         <TextView
             android:id="@+id/dialog_endTime"
@@ -84,6 +84,7 @@
             android:gravity="left" />
 
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/dialog_buttons"
         android:layout_width="match_parent"
@@ -97,16 +98,15 @@
             android:layout_height="wrap_content"
             android:layout_margin="5sp"
             android:fontFamily="@font/pnm"
-            android:text="추가"/>
+            android:text="추가" />
 
         <Button
             android:id="@+id/dialog_cancel"
             android:layout_width="wrap_content"
-            android:fontFamily="@font/pnm"
             android:layout_height="wrap_content"
             android:layout_margin="5sp"
-            android:text="취소"/>
-
+            android:fontFamily="@font/pnm"
+            android:text="취소" />
 
 
     </LinearLayout>

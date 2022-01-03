@@ -44,8 +44,6 @@ public class HomeFragment extends Fragment {
     private String searchText;
 
 
-
-
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
@@ -119,7 +117,7 @@ public class HomeFragment extends Fragment {
         searchView = view.findViewById(R.id.searchView);
         int id = androidx.appcompat.R.id.search_src_text; //searchView.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
         TextView searchViewText = (TextView) searchView.findViewById(id);
-        Typeface myCustomFont = Typeface.createFromAsset(getActivity().getAssets(),"fonts/pnm.otf");
+        Typeface myCustomFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/pnm.otf");
         searchViewText.setTypeface(myCustomFont);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

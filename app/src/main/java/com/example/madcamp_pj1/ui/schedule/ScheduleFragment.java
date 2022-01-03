@@ -34,17 +34,16 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import nl.joery.timerangepicker.TimeRangePicker;
-
 public class ScheduleFragment extends Fragment {
 
     private final Handler timerHandler = new Handler();
+    private final int canvasWidth = 1024;
+    private final int canvasHeight = 1024;
     Date currentTime;
     ArrayList<Schedule> schedules;
     ImageButton scheduleAddBtn;
@@ -58,8 +57,6 @@ public class ScheduleFragment extends Fragment {
     private RecyclerView rview;
     private ScheduleAdapter adapter;
     private TextView curScheduleView;
-    private final int canvasWidth = 1024;
-    private final int canvasHeight = 1024;
     private TimerTask timerTask;
 
     private void timerStart() {
@@ -322,7 +319,7 @@ public class ScheduleFragment extends Fragment {
 
         Paint textPaint = new Paint();
         textPaint.setColor(0xFF000000);
-        Typeface face = Typeface.createFromAsset(getActivity().getAssets(),"fonts/pnm.otf");
+        Typeface face = Typeface.createFromAsset(getActivity().getAssets(), "fonts/pnm.otf");
         textPaint.setTypeface(face);
         textPaint.setTextSize(fontSize);
         textPaint.setTextAlign(Paint.Align.CENTER);

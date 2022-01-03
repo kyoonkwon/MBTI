@@ -11,7 +11,6 @@ import android.widget.ImageView;
 
 import com.example.madcamp_pj1.R;
 
-import java.io.File;
 import java.util.ArrayList;
 
 public class GalleryAdapter extends BaseAdapter {

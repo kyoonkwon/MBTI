@@ -14,16 +14,16 @@ public class Schedule implements Comparable<Schedule> {
     SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 
 
-    public int compareTo(Schedule schedule){
-        return sdf.format(startTime).compareTo(schedule.getStartTimeAsString());
-
-    }
-
-    public Schedule(String name, Date startTime, Date endTime, boolean alarm){
+    public Schedule(String name, Date startTime, Date endTime, boolean alarm) {
         this.name = name;
         this.startTime = startTime;
         this.endTime = endTime;
         this.alarm = alarm;
+    }
+
+    public int compareTo(Schedule schedule) {
+        return sdf.format(startTime).compareTo(schedule.getStartTimeAsString());
+
     }
 
     public String getName() {

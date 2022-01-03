@@ -32,8 +32,8 @@ import java.util.Date;
 
 public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHolder> {
 
-    private ArrayList<Schedule> mScheduleList;
     private final Activity m_activity;
+    private ArrayList<Schedule> mScheduleList;
 
     public ScheduleAdapter(Activity activity) {
         m_activity = activity;
@@ -83,7 +83,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
         long repeatInterval = AlarmManager.INTERVAL_DAY;
         long triggerTime = (SystemClock.elapsedRealtime()
                 + repeatInterval);
-        if(datetime.before(date)){
+        if (datetime.before(date)) {
             datetime.setTime(date.getTime() + repeatInterval);
         }
 
