@@ -3,7 +3,7 @@ package com.example.madcamp_pj1.ui.schedule;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Schedule {
+public class Schedule implements Comparable<Schedule> {
 
     String name;
     // hour * 60 + min
@@ -12,6 +12,11 @@ public class Schedule {
     boolean alarm;
 
     SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+
+    public int compareTo(Schedule schedule){
+        return sdf.format(startTime).compareTo(schedule.getStartTimeAsString());
+
+    }
 
     public Schedule(String name, Date startTime, Date endTime, boolean alarm){
         this.name = name;

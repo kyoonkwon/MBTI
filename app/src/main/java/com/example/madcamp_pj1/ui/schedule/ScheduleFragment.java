@@ -28,6 +28,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentResultListener;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -37,9 +38,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import nl.joery.timerangepicker.TimeRangePicker;
 
 public class ScheduleFragment extends Fragment {
 
@@ -82,7 +87,6 @@ public class ScheduleFragment extends Fragment {
                 drawTimeBar();
                 scheduler.setImageDrawable(new BitmapDrawable(getResources(), schedulerBitmap));
                 findCurrentSchedule();
-                Log.i("log1", "tick");
             }
         };
         timerHandler.post(updater);
@@ -92,6 +96,31 @@ public class ScheduleFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         timerTask.cancel();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getChildFragmentManager().setFragmentResultListener("dialog", this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
+                String name = result.getString("name");
+                String startTime = result.getString("startTime");
+                String endTime = result.getString("endTime");
+                Boolean isAlarm = result.getBoolean("alarm");
+
+                Log.i("log1", name + startTime + endTime + isAlarm);
+                try {
+                    schedules.add(new Schedule(name, sdf.parse(startTime), sdf.parse(endTime), isAlarm));
+                    Collections.sort(schedules);
+                    adapter.notifyDataSetChanged();
+                    reDraw();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -122,16 +151,16 @@ public class ScheduleFragment extends Fragment {
         rview.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         schedules = new ArrayList<>();
-        try {
-            schedules.add(new Schedule("잠자기", sdf.parse("00:00"), sdf.parse("11:00"), false));
-            schedules.add(new Schedule("점심먹기", sdf.parse("12:00"), sdf.parse("13:00"), true));
-            schedules.add(new Schedule("코딩하기", sdf.parse("14:00"), sdf.parse("18:00"), false));
-            schedules.add(new Schedule("저녁먹기",  sdf.parse("18:30"), sdf.parse("20:00"), true));
-            schedules.add(new Schedule("코딩또하기",  sdf.parse("20:00"), sdf.parse("23:59"), false));
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            schedules.add(new Schedule("잠자기", sdf.parse("00:00"), sdf.parse("11:00"), false));
+//            schedules.add(new Schedule("점심먹기", sdf.parse("12:00"), sdf.parse("13:00"), true));
+//            schedules.add(new Schedule("코딩하기", sdf.parse("14:00"), sdf.parse("18:00"), false));
+//            schedules.add(new Schedule("저녁먹기",  sdf.parse("18:30"), sdf.parse("20:00"), true));
+//            schedules.add(new Schedule("코딩또하기",  sdf.parse("20:00"), sdf.parse("23:59"), false));
+//
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
 
 
         adapter.setScheduleList(schedules);
@@ -153,29 +182,33 @@ public class ScheduleFragment extends Fragment {
         }
 
         scheduleAddBtn = view.findViewById(R.id.scheduleAddBtn);
-        scheduleAddBtn.setOnClickListener(v -> showAddSchedule());
+        scheduleAddBtn.setOnClickListener(v -> new DialogFragment().show(getChildFragmentManager(), "dialog"));
+
 
     }
 
-    private void showAddSchedule(){
+    private void reDraw(){
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        LayoutInflater inflater = getLayoutInflater();
-        View view = inflater.inflate(R.layout.dialog_addschedule, null);
-        builder.setView(view);
-        builder.setPositiveButton("예",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getContext(),"예를 선택했습니다.",Toast.LENGTH_LONG).show();
-                    }
-                });
-        builder.setNegativeButton("아니오",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getContext(),"아니오를 선택했습니다.",Toast.LENGTH_LONG).show();
-                    }
-                });
-        builder.show();
+        Paint paint = new Paint();
+        paint.setColor(0xFFFFFFFF);
+        SchedulerCanvas.drawCircle(canvasWidth/2, canvasHeight/2, canvasHeight/2-250, paint);
+
+
+        int[] colors = {0xffffafb0, 0xffffafd8, 0xffeeb7b4, 0xfff2cfa5, 0xfffcffb0, 0xffaee4ff};
+        int i=0;
+        for(Schedule schedule : schedules){
+            drawSchedule(schedule, colors[i]);
+            if(sdf.format(currentTime).compareTo(sdf.format(schedule.getStartTime())) >= 0 &&
+                    sdf.format(currentTime).compareTo(sdf.format(schedule.getEndTime())) < 0){
+                curScheduleView.setText(sdf.format(currentTime) + " - " +schedule.getName());
+            }
+
+            i = (i + 1) % colors.length;
+        }
+
+        for(Schedule schedule: schedules){
+            writeSchedule(schedule);
+        }
 
     }
 
