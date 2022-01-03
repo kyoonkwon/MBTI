@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
         File filesDir = this.getFilesDir();
         File isInitialized = new File(filesDir, "isInitialized.tmp");
-
+        //isInitialized.delete();
         try {
             if (isInitialized.createNewFile()) {
                 AssetManager am = this.getAssets();
