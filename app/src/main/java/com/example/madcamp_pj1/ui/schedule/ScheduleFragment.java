@@ -181,28 +181,29 @@ public class ScheduleFragment extends Fragment {
     }
 
 
-    private void reDraw(){
+    private void reDraw() {
 
         Paint paint = new Paint();
         paint.setColor(0xFFFFFFFF);
-        SchedulerCanvas.drawCircle(canvasWidth/2, canvasHeight/2, canvasHeight/2-250, paint);
+        SchedulerCanvas.drawCircle(canvasWidth / 2, canvasHeight / 2, canvasHeight / 2 - 250, paint);
 
 
         int[] colors = {0xffffafb0, 0xffffafd8, 0xffeeb7b4, 0xfff2cfa5, 0xfffcffb0, 0xffaee4ff};
-        int i=0;
-        for(Schedule schedule : schedules){
+        int i = 0;
+        for (Schedule schedule : schedules) {
             drawSchedule(schedule, colors[i]);
-            if(sdf.format(currentTime).compareTo(sdf.format(schedule.getStartTime())) >= 0 &&
-                    sdf.format(currentTime).compareTo(sdf.format(schedule.getEndTime())) < 0){
-                curScheduleView.setText(sdf.format(currentTime) + " - " +schedule.getName());
+            if (sdf.format(currentTime).compareTo(sdf.format(schedule.getStartTime())) >= 0 &&
+                    sdf.format(currentTime).compareTo(sdf.format(schedule.getEndTime())) < 0) {
+                curScheduleView.setText(sdf.format(currentTime) + " - " + schedule.getName());
             }
 
             i = (i + 1) % colors.length;
         }
 
-        for(Schedule schedule: schedules){
+        for (Schedule schedule : schedules) {
             writeSchedule(schedule);
         }
+    }
 
     private void showAddSchedule() {
 
