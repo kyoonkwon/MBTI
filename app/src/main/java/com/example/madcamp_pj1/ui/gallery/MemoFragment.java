@@ -83,8 +83,6 @@ public class MemoFragment extends Fragment implements OnBackPressedListener {
                 text.setText(string);
                 text.setTextSize((float) (text.getTextSize() - 2));
 
-                ImageView im = rootView.findViewById(R.id.chat_bubble);
-                im.setVisibility(View.VISIBLE);
 
                 ConstraintSet constraintSet = new ConstraintSet();
                 constraintSet.clone((ConstraintLayout) text.getParent());
@@ -112,8 +110,6 @@ public class MemoFragment extends Fragment implements OnBackPressedListener {
                     if (OCRResult == null) {
                         OCRResult = "글귀가 검색되지 않습니다.";
                     }
-                    ImageView im = rootView.findViewById(R.id.chat_bubble);
-                    im.setVisibility(View.VISIBLE);
 
                     loading.setVisibility(View.INVISIBLE);
 
@@ -174,6 +170,8 @@ public class MemoFragment extends Fragment implements OnBackPressedListener {
             while (true) {
                 File oldFile = new File(filesDir, "img" + count + ".png");
                 File oldText = new File(filesDir, "img" + count + ".txt");
+                File oldThumbnail = new File(filesDir, "thumbnail" + count + "png");
+                oldThumbnail.delete();
                 if (oldText.exists()) {
                     File newText = new File(filesDir, "img" + (count - 1) + ".txt");
                     oldText.renameTo(newText);
