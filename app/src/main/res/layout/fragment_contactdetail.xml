@@ -16,6 +16,7 @@
             android:layout_width="50sp"
             android:layout_height="0dp"
             android:layout_gravity="end"
+            android:fontFamily="@font/pnm"
             android:layout_weight="1"
             android:text="X" />
 
@@ -65,6 +66,7 @@
             <Button
                 android:id="@+id/detailFixBtn"
                 android:layout_width="0dp"
+                android:fontFamily="@font/pnm"
                 android:layout_height="match_parent"
                 android:layout_margin="10sp"
                 android:layout_weight="1"
@@ -73,6 +75,7 @@
             <Button
                 android:id="@+id/detailDelBtn"
                 android:layout_width="0dp"
+                android:fontFamily="@font/pnm"
                 android:layout_height="match_parent"
                 android:layout_margin="10sp"
                 android:layout_weight="1"

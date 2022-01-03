@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:scrollbarSize="@dimen/big_image_padding"
         android:scrollbarStyle="insideInset"
-        android:scrollbarThumbVertical="@color/purple_500"
+        android:scrollbarThumbVertical="@color/primary"
         android:scrollbarTrackVertical="@color/white"
         android:verticalScrollbarPosition="right"
         app:layout_constraintEnd_toEndOf="parent"
@@ -37,6 +37,7 @@
 
             <Button
                 android:id="@+id/api_button"
+                android:fontFamily="@font/pnm"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/button_height"
                 android:layout_marginLeft="17dp"
@@ -47,6 +48,7 @@
 
             <Button
                 android:id="@+id/loading_button"
+                android:fontFamily="@font/pnm"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/button_height"
                 android:layout_marginLeft="17dp"
@@ -61,10 +63,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="450dp"
                 android:layout_marginLeft="@dimen/big_image_padding"
-                android:layout_marginTop="@dimen/big_image_padding"
-                android:background="@drawable/bg_ocr"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/ocr_text_background"
                 android:paddingStart="30dp"
-                android:paddingTop="85dp"
+                android:paddingTop="40dp"
                 android:paddingEnd="30dp"
                 android:textColor="@color/black"
                 android:textSize="6pt"
@@ -87,6 +89,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_marginLeft="17dp"
+                android:fontFamily="@font/pnm"
                 android:layout_marginTop="17dp"
                 android:layout_marginRight="@dimen/big_image_padding"
                 android:layout_marginBottom="@dimen/big_image_padding"
@@ -107,6 +110,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="@dimen/button_margin"
                 android:layout_marginBottom="@dimen/big_image_padding"
+                android:fontFamily="@font/pnm"
                 android:text="@string/confirm_button_text"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/memo_edit_text" />
@@ -115,6 +119,7 @@
                 android:id="@+id/delete_button"
                 android:layout_width="@dimen/button_width"
                 android:layout_height="@dimen/button_height"
+                android:fontFamily="@font/pnm"
                 android:layout_marginLeft="@dimen/button_margin"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="@dimen/big_image_padding"

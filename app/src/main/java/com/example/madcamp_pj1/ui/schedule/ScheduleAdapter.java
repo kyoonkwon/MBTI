@@ -80,11 +80,16 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
         Date datetime = dateFormat.parse(when);
         Log.e("NOTI", "SET:" + datetime.toString());
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(datetime);
-        AlarmManager alarmManager = (AlarmManager) m_activity.getSystemService(Context.ALARM_SERVICE);
         long repeatInterval = AlarmManager.INTERVAL_DAY;
         long triggerTime = (SystemClock.elapsedRealtime()
                 + repeatInterval);
+        if(datetime.before(date)){
+            datetime.setTime(date.getTime() + repeatInterval);
+        }
+
+        calendar.setTime(datetime);
+        AlarmManager alarmManager = (AlarmManager) m_activity.getSystemService(Context.ALARM_SERVICE);
+
 
         alarmManager.setInexactRepeating(
                 AlarmManager.ELAPSED_REALTIME_WAKEUP,
