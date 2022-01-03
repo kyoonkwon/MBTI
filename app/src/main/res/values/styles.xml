@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="PnmTextViewStyle" parent="@android:style/Widget.DeviceDefault.TextView">
+        <item name="android:fontFamily">@font/pnm</item>
+    </style>
+    <style name="PnmButtonStyle" parent="@android:style/Widget.DeviceDefault.Button">
+        <item name="android:fontFamily">@font/pnm</item>
+    </style>
+    <style name="PnmEditTextStyle" parent="@android:style/Widget.DeviceDefault.EditText">
+        <item name="android:fontFamily">@font/pnm</item>
+    </style>
+</resources>

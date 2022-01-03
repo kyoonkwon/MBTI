@@ -16,7 +16,7 @@
         android:numColumns="@integer/gallery_num_of_columns"
         android:scrollbarSize="@dimen/gallery_grid_spacing"
         android:scrollbarStyle="insideInset"
-        android:scrollbarThumbVertical="@color/purple_500"
+        android:scrollbarThumbVertical="@color/primary"
         android:scrollbarTrackVertical="@color/white"
         android:verticalScrollbarPosition="right"
         android:verticalSpacing="@dimen/gallery_grid_spacing"

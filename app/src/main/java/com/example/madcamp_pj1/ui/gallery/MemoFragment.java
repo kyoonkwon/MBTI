@@ -78,8 +78,6 @@ public class MemoFragment extends Fragment implements OnBackPressedListener {
                 TextView text = rootView.findViewById(R.id.OCR_text);
                 text.setVisibility(View.VISIBLE);
                 text.setText(string);
-                text.setTextSize((float) (text.getTextSize() - 2));
-
 
                 ConstraintSet constraintSet = new ConstraintSet();
                 constraintSet.clone((ConstraintLayout) text.getParent());
