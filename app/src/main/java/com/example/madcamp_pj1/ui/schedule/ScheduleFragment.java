@@ -288,28 +288,6 @@ public class ScheduleFragment extends Fragment {
         }
     }
 
-    private void showAddSchedule() {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        LayoutInflater inflater = getLayoutInflater();
-        View view = inflater.inflate(R.layout.dialog_addschedule, null);
-        builder.setView(view);
-        builder.setPositiveButton("예",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getContext(), "예를 선택했습니다.", Toast.LENGTH_LONG).show();
-                    }
-                });
-        builder.setNegativeButton("아니오",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getContext(), "아니오를 선택했습니다.", Toast.LENGTH_LONG).show();
-                    }
-                });
-        builder.show();
-
-
-    }
 
     private void findCurrentSchedule() {
         String curSchedule = "일정 없음";
@@ -392,7 +370,7 @@ public class ScheduleFragment extends Fragment {
     }
 
     private void writeSchedule(Schedule schedule) {
-        int fontSize = 50;
+
         int r = canvasWidth / 2 - 250;
 
         Date startTime = schedule.getStartTime();
@@ -401,6 +379,8 @@ public class ScheduleFragment extends Fragment {
         int startAngle = (60 * Integer.parseInt(hourFormat.format((startTime))) + Integer.parseInt(minFormat.format((startTime)))) / 4;
         int endAngle = (60 * Integer.parseInt(hourFormat.format((endTime))) + Integer.parseInt(minFormat.format((endTime)))) / 4;
         int middleAngle = (startAngle + endAngle) / 2;
+
+        int fontSize = Math.min(50, (int) ((endAngle-startAngle) * 2));
 
         Paint textPaint = new Paint();
         textPaint.setColor(0xFF000000);

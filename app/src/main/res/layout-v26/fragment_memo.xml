@@ -64,7 +64,7 @@
                 android:layout_height="450dp"
                 android:layout_marginStart="@dimen/big_image_padding"
                 android:layout_marginTop="10dp"
-                android:autoSizeMaxTextSize="8pt"
+
                 android:autoSizeMinTextSize="2pt"
                 android:autoSizeStepGranularity="1.25pt"
                 android:autoSizeTextType="uniform"

@@ -45,18 +45,22 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:scaleX="0.7"
+            android:scaleY="0.7"
             android:src="@mipmap/ic_phonecall" />
 
         <View
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.3"></View>
+            android:layout_weight="0.1"></View>
 
         <ImageButton
             android:id="@+id/msgBtn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:scaleX="0.7"
+            android:scaleY="0.7"
             android:src="@mipmap/ic_message" />
 
     </LinearLayout>

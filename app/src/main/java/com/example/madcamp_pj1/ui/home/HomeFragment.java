@@ -1,5 +1,8 @@
 package com.example.madcamp_pj1.ui.home;
 
+import static android.app.Activity.RESULT_OK;
+
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
@@ -22,6 +25,11 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContract;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
@@ -43,9 +51,19 @@ public class HomeFragment extends Fragment {
     private SearchView searchView;
     private String searchText;
 
+    private ActivityResultLauncher<Intent> getResult;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getResult = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    refresh();
+                }
+            });
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -107,7 +125,8 @@ public class HomeFragment extends Fragment {
                 Intent intent = new Intent(ContactsContract.Intents.Insert.ACTION);
                 intent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
                 intent.putExtra("finishActivityOnSaveCompleted", true);
-                startActivityForResult(intent, 10);
+                getResult.launch(intent);
+                //startActivityForResult(intent, 10);
             }
         });
 
@@ -171,6 +190,11 @@ public class HomeFragment extends Fragment {
         mRecyclerAdapter.notifyDataSetChanged();
     }
 
+    private void reAttach(){
+        FragmentTransaction ft = this.getParentFragmentManager().beginTransaction();
+        ft.detach(this).attach(this).commit();
+    }
+
 
     private void showDetail(int i) {
 
@@ -195,16 +219,6 @@ public class HomeFragment extends Fragment {
     }
 
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == 10) {
-            Log.i("contact1", "frag1");
-            FragmentTransaction ft = this.getParentFragmentManager().beginTransaction();
-            ft.detach(this).attach(this).commit();
-        }
-    }
 
     private Bitmap queryContactImage(int imageDataRow) {
         Cursor c = getActivity().getContentResolver().query(ContactsContract.Data.CONTENT_URI, new String[]{
