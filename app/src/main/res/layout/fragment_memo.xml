@@ -66,8 +66,8 @@
                 android:paddingStart="30dp"
                 android:paddingTop="85dp"
                 android:paddingEnd="30dp"
-                android:textSize="6pt"
                 android:textColor="@color/black"
+                android:textSize="6pt"
                 android:visibility="invisible"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/big_image" />

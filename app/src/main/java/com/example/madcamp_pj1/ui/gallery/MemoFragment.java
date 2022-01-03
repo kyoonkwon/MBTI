@@ -5,7 +5,6 @@ import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,10 +71,8 @@ public class MemoFragment extends Fragment implements OnBackPressedListener {
                 String string = "";
                 String str;
 
-                while ((str = br.readLine()) != null) {
-                    Log.e("STRING!", str);
+                while ((str = br.readLine()) != null)
                     string = string.concat(str.concat("\n"));
-                }
                 br.close();
 
                 TextView text = rootView.findViewById(R.id.OCR_text);
@@ -149,10 +146,9 @@ public class MemoFragment extends Fragment implements OnBackPressedListener {
                 String string = "";
                 String str;
 
-                while ((str = memoBr.readLine()) != null) {
-                    Log.e("STRING!", str);
+                while ((str = memoBr.readLine()) != null)
                     string = string.concat(str.concat("\n"));
-                }
+
                 memoBr.close();
                 editText.setText(string);
             } catch (IOException e) {
@@ -163,20 +159,32 @@ public class MemoFragment extends Fragment implements OnBackPressedListener {
         Button deleteButton = rootView.findViewById(R.id.delete_button);
         deleteButton.setOnClickListener(v -> {
             file.delete();
-            if (textFile.exists()) {
+            if (textFile.exists())
                 textFile.delete();
-            }
+            if (memoFile.exists())
+                memoFile.delete();
+            File thumbnail = new File(filesDir, "thumbnail" + position + ".png");
+            thumbnail.delete();
+
             int count = position + 1;
             while (true) {
                 File oldFile = new File(filesDir, "img" + count + ".png");
-                File oldText = new File(filesDir, "img" + count + ".txt");
-                File oldThumbnail = new File(filesDir, "thumbnail" + count + "png");
-                oldThumbnail.delete();
-                if (oldText.exists()) {
-                    File newText = new File(filesDir, "img" + (count - 1) + ".txt");
-                    oldText.renameTo(newText);
-                }
                 if (oldFile.exists()) {
+                    File oldText = new File(filesDir, "img" + count + ".txt");
+                    File oldMemo = new File(filesDir, "memo" + count + ".txt");
+                    File oldThumbnail = new File(filesDir, "thumbnail" + count + ".png");
+                    File newThumbnail = new File(filesDir, "thumbnail" + (count - 1) + ".png");
+                    oldThumbnail.renameTo(newThumbnail);
+                    if (oldText.exists()) {
+                        File newText = new File(filesDir, "img" + (count - 1) + ".txt");
+                        oldText.renameTo(newText);
+                    }
+
+                    if (oldMemo.exists()) {
+                        File newMemo = new File(filesDir, "memo" + (count - 1) + ".txt");
+                        oldMemo.renameTo(newMemo);
+                    }
+
                     File newName = new File(filesDir, "img" + (count - 1) + ".png");
                     oldFile.renameTo(newName);
                     count++;

@@ -16,14 +16,12 @@ import java.util.ArrayList;
 
 public class GalleryAdapter extends BaseAdapter {
     private final Context m_context;
-    private final Activity m_activity;
     private final ArrayList<GalleryItem> m_array;
 
 
     public GalleryAdapter(Context context, Activity activity) {
         this.m_context = context;
         this.m_array = new ArrayList<>();
-        this.m_activity = activity;
     }
 
     @Override
@@ -47,7 +45,6 @@ public class GalleryAdapter extends BaseAdapter {
         convertView = inflater.inflate(R.layout.gallery_item, parent, false);
         ImageView imageView = convertView.findViewById(R.id.item_image);
 
-        File filesDir =m_activity.getFilesDir();
         Bitmap bitmap = getItemBitmap(position);
         imageView.setImageBitmap(bitmap);
 

@@ -1,19 +1,12 @@
 package com.example.madcamp_pj1.ui.schedule;
 
 import android.annotation.SuppressLint;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,24 +14,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CalendarView;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentResultListener;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.madcamp_pj1.MainActivity;
 import com.example.madcamp_pj1.R;
 
 import java.text.ParseException;
@@ -55,28 +43,25 @@ import nl.joery.timerangepicker.TimeRangePicker;
 
 public class ScheduleFragment extends Fragment {
 
+    private final Handler timerHandler = new Handler();
+    Date currentTime;
+    ArrayList<Schedule> schedules;
+    ImageButton scheduleAddBtn;
+    SimpleDateFormat hourFormat = new SimpleDateFormat("HH");
+    SimpleDateFormat minFormat = new SimpleDateFormat("mm");
+    @SuppressLint("SimpleDateFormat")
+    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
     private Canvas SchedulerCanvas;
     private ImageView scheduler;
     private Bitmap schedulerBitmap;
     private RecyclerView rview;
     private ScheduleAdapter adapter;
     private TextView curScheduleView;
-    Date currentTime;
-    ArrayList<Schedule> schedules;
-
-    ImageButton scheduleAddBtn;
-
-    SimpleDateFormat hourFormat = new SimpleDateFormat("HH");
-    SimpleDateFormat minFormat = new SimpleDateFormat("mm");
-    @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-
-    private int canvasWidth = 1024;
-    private int canvasHeight = 1024;
-
+    private final int canvasWidth = 1024;
+    private final int canvasHeight = 1024;
     private TimerTask timerTask;
-    private final Handler timerHandler = new Handler();
 
-    private void timerStart(){
+    private void timerStart() {
         timerTask = new TimerTask() {
             @Override
             public void run() {
@@ -89,7 +74,7 @@ public class ScheduleFragment extends Fragment {
 
     protected void Update() {
         Runnable updater = new Runnable() {
-            public void run(){
+            public void run() {
                 currentTime = Calendar.getInstance().getTime();
                 drawTimeBar();
                 scheduler.setImageDrawable(new BitmapDrawable(getResources(), schedulerBitmap));
@@ -158,6 +143,7 @@ public class ScheduleFragment extends Fragment {
         rview.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         schedules = new ArrayList<>();
+
 //        try {
 //            schedules.add(new Schedule("잠자기", sdf.parse("00:00"), sdf.parse("11:00"), false));
 //            schedules.add(new Schedule("점심먹기", sdf.parse("12:00"), sdf.parse("13:00"), true));
@@ -173,18 +159,18 @@ public class ScheduleFragment extends Fragment {
         adapter.setScheduleList(schedules);
 
         int[] colors = {0xffffafb0, 0xffffafd8, 0xffeeb7b4, 0xfff2cfa5, 0xfffcffb0, 0xffaee4ff};
-        int i=0;
-        for(Schedule schedule : schedules){
+        int i = 0;
+        for (Schedule schedule : schedules) {
             drawSchedule(schedule, colors[i]);
-            if(sdf.format(currentTime).compareTo(sdf.format(schedule.getStartTime())) >= 0 &&
-                    sdf.format(currentTime).compareTo(sdf.format(schedule.getEndTime())) < 0){
-                curScheduleView.setText(sdf.format(currentTime) + " - " +schedule.getName());
+            if (sdf.format(currentTime).compareTo(sdf.format(schedule.getStartTime())) >= 0 &&
+                    sdf.format(currentTime).compareTo(sdf.format(schedule.getEndTime())) < 0) {
+                curScheduleView.setText(sdf.format(currentTime) + " - " + schedule.getName());
             }
 
             i = (i + 1) % colors.length;
         }
 
-        for(Schedule schedule: schedules){
+        for (Schedule schedule : schedules) {
             writeSchedule(schedule);
         }
 
@@ -193,6 +179,7 @@ public class ScheduleFragment extends Fragment {
 
 
     }
+
 
     private void reDraw(){
 
@@ -217,13 +204,34 @@ public class ScheduleFragment extends Fragment {
             writeSchedule(schedule);
         }
 
+    private void showAddSchedule() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.dialog_addschedule, null);
+        builder.setView(view);
+        builder.setPositiveButton("예",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(getContext(), "예를 선택했습니다.", Toast.LENGTH_LONG).show();
+                    }
+                });
+        builder.setNegativeButton("아니오",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(getContext(), "아니오를 선택했습니다.", Toast.LENGTH_LONG).show();
+                    }
+                });
+        builder.show();
+
+
     }
 
-    private void findCurrentSchedule(){
+    private void findCurrentSchedule() {
         String curSchedule = "일정 없음";
-        for(Schedule schedule : schedules){
-            if(sdf.format(currentTime).compareTo(sdf.format(schedule.getStartTime())) >= 0 &&
-                    sdf.format(currentTime).compareTo(sdf.format(schedule.getEndTime())) < 0){
+        for (Schedule schedule : schedules) {
+            if (sdf.format(currentTime).compareTo(sdf.format(schedule.getStartTime())) >= 0 &&
+                    sdf.format(currentTime).compareTo(sdf.format(schedule.getEndTime())) < 0) {
                 curSchedule = schedule.getName();
             }
         }
@@ -233,9 +241,9 @@ public class ScheduleFragment extends Fragment {
     }
 
 
-    private void drawTimeBar(){
+    private void drawTimeBar() {
 
-        int percent = (60 * Integer.parseInt(hourFormat.format((currentTime))) + Integer.parseInt(minFormat.format((currentTime)))) / 4 ;
+        int percent = (60 * Integer.parseInt(hourFormat.format((currentTime))) + Integer.parseInt(minFormat.format((currentTime)))) / 4;
         int barWidth = 60;
 
         Paint paint = new Paint();
@@ -248,21 +256,20 @@ public class ScheduleFragment extends Fragment {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             paint.setColor(0xFFEEEEEE);
-            SchedulerCanvas.drawArc(barWidth+40, barWidth+40, canvasWidth-barWidth-40, canvasHeight-barWidth-40, -90, 360, false, paint);
+            SchedulerCanvas.drawArc(barWidth + 40, barWidth + 40, canvasWidth - barWidth - 40, canvasHeight - barWidth - 40, -90, 360, false, paint);
             paint.setColor(0xFFFFC7C7);
-            SchedulerCanvas.drawArc(barWidth+20, barWidth+20, canvasWidth-barWidth-20, canvasHeight-barWidth-20, -90, percent, false, paint);
+            SchedulerCanvas.drawArc(barWidth + 20, barWidth + 20, canvasWidth - barWidth - 20, canvasHeight - barWidth - 20, -90, percent, false, paint);
 
 
             textPaint.setTextSize(80);
-            for(int angle = 0; angle < 360; angle += 15) {
-                double posx = canvasWidth / 2 + (canvasWidth/2 - 90) * Math.cos(Math.toRadians(angle - 90));
-                double posy = canvasHeight / 2 + (canvasHeight/2 - 90) * Math.sin(Math.toRadians(angle - 90));
+            for (int angle = 0; angle < 360; angle += 15) {
+                double posx = canvasWidth / 2 + (canvasWidth / 2 - 90) * Math.cos(Math.toRadians(angle - 90));
+                double posy = canvasHeight / 2 + (canvasHeight / 2 - 90) * Math.sin(Math.toRadians(angle - 90));
 
-                if(angle % 90 == 0){
+                if (angle % 90 == 0) {
                     textPaint.setTextSize(50);
-                    SchedulerCanvas.drawText(String.valueOf( angle / 15), (int) posx, (int) posy + 20, textPaint);
-                }
-                else {
+                    SchedulerCanvas.drawText(String.valueOf(angle / 15), (int) posx, (int) posy + 20, textPaint);
+                } else {
                     textPaint.setTextSize(50);
                     SchedulerCanvas.drawCircle((int) posx, (int) posy, 5, textPaint);
                 }
@@ -270,7 +277,7 @@ public class ScheduleFragment extends Fragment {
         }
     }
 
-    private void drawSchedule(Schedule schedule, int color){
+    private void drawSchedule(Schedule schedule, int color) {
 
         int strokeWidth = 10;
         int space = 150;
@@ -292,7 +299,7 @@ public class ScheduleFragment extends Fragment {
         strokePaint.setStyle(Paint.Style.STROKE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            SchedulerCanvas.drawArc(space, space, canvasWidth-space, canvasHeight-space, -90+startAngle, endAngle-startAngle, true, paint);
+            SchedulerCanvas.drawArc(space, space, canvasWidth - space, canvasHeight - space, -90 + startAngle, endAngle - startAngle, true, paint);
             //SchedulerCanvas.drawArc(space, space, canvasWidth-space, canvasHeight-space, -90+startAngle, endAngle-startAngle, true, strokePaint);
 
 
@@ -300,16 +307,16 @@ public class ScheduleFragment extends Fragment {
 
     }
 
-    private void writeSchedule(Schedule schedule){
+    private void writeSchedule(Schedule schedule) {
         int fontSize = 50;
-        int r = canvasWidth/2- 250;
+        int r = canvasWidth / 2 - 250;
 
         Date startTime = schedule.getStartTime();
         Date endTime = schedule.getEndTime();
 
         int startAngle = (60 * Integer.parseInt(hourFormat.format((startTime))) + Integer.parseInt(minFormat.format((startTime)))) / 4;
         int endAngle = (60 * Integer.parseInt(hourFormat.format((endTime))) + Integer.parseInt(minFormat.format((endTime)))) / 4;
-        int middleAngle = (startAngle+endAngle) / 2;
+        int middleAngle = (startAngle + endAngle) / 2;
 
         Paint textPaint = new Paint();
         textPaint.setColor(0xFF000000);
@@ -321,8 +328,8 @@ public class ScheduleFragment extends Fragment {
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            double posx = canvasWidth/2  + r * Math.cos(Math.toRadians(middleAngle-90));
-            double posy = canvasHeight/2  + r * Math.sin(Math.toRadians(middleAngle-90));
+            double posx = canvasWidth / 2 + r * Math.cos(Math.toRadians(middleAngle - 90));
+            double posy = canvasHeight / 2 + r * Math.sin(Math.toRadians(middleAngle - 90));
 
 
             SchedulerCanvas.drawText(schedule.getName(), (int) posx, (int) posy + 10, textPaint);

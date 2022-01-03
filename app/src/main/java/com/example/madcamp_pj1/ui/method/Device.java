@@ -21,7 +21,7 @@ public class Device {
     }
 
     @RequiresApi(api = JELLY_BEAN_MR1)
-    public static int getGalleryColumnWidth(Activity activity ) {
+    public static int getGalleryColumnWidth(Activity activity) {
         int width = getScreenWidth(activity);
         Resources res;
         res = activity.getResources();
@@ -29,6 +29,7 @@ public class Device {
         int size = (width - 4 * horizontalSpacing) / 3;
         return size;
     }
+
     @RequiresApi(api = JELLY_BEAN_MR1)
     public static Bitmap createThumbnail(Bitmap bitmap, Activity activity) {
         int height = bitmap.getHeight();

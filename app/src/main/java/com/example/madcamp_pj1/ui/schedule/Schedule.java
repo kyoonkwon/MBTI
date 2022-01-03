@@ -13,6 +13,7 @@ public class Schedule implements Comparable<Schedule> {
 
     SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 
+
     public int compareTo(Schedule schedule){
         return sdf.format(startTime).compareTo(schedule.getStartTimeAsString());
 
@@ -29,6 +30,10 @@ public class Schedule implements Comparable<Schedule> {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getStartTimeAsString() {
         return sdf.format(startTime);
     }
@@ -37,31 +42,27 @@ public class Schedule implements Comparable<Schedule> {
         return sdf.format(endTime);
     }
 
-    public boolean getAlarm(){
+    public boolean getAlarm() {
         return alarm;
+    }
+
+    public void setAlarm(boolean alarm) {
+        this.alarm = alarm;
     }
 
     public Date getStartTime() {
         return startTime;
     }
 
-    public Date getEndTime() {
-        return endTime;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }
 
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
+    public Date getEndTime() {
+        return endTime;
     }
 
-    public void setAlarm(boolean alarm) {
-        this.alarm = alarm;
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 }

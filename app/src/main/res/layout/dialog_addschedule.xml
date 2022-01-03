@@ -24,7 +24,6 @@
         android:weightSum="5">
 
 
-
         <EditText
             android:id="@+id/dialogScheduleName"
             android:layout_width="0dp"

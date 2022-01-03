@@ -20,13 +20,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
-
 import androidx.annotation.NonNull;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
-
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -45,7 +42,7 @@ public class HomeFragment extends Fragment {
     private String searchText;
 
 
-    public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
@@ -60,7 +57,7 @@ public class HomeFragment extends Fragment {
         Log.i("contact1", "created");
 
         mRecyclerAdapter = new MyRecyclerAdapter();
-        if(contactList == null) {
+        if (contactList == null) {
             contactList = getContactList("");
         }
         mRecyclerView = view.findViewById(R.id.recyclerView);
@@ -132,7 +129,7 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    void delContact(String key){
+    void delContact(String key) {
         ContentResolver cr = getActivity().getContentResolver();
         Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, ContactsContract.Contacts.LOOKUP_KEY + "= '"
                 + key + "' ", null, null);
@@ -156,19 +153,19 @@ public class HomeFragment extends Fragment {
         refresh();
     }
 
-    public void refreshShowDetail(int i){
+    public void refreshShowDetail(int i) {
         refresh();
         showDetail(i);
     }
 
-    public void refresh(){
+    public void refresh() {
         contactList = getContactList(searchText);
         getContactListAsLog();
         mRecyclerAdapter.notifyDataSetChanged();
     }
 
 
-    private void showDetail(int i){
+    private void showDetail(int i) {
 
         try {
 
@@ -185,8 +182,7 @@ public class HomeFragment extends Fragment {
                     .add(R.id.nav_host_fragment, contactDetailFragment)
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                     .commit();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Log.e("contact1", "deleteContactById: ", e);
         }
     }
@@ -204,9 +200,9 @@ public class HomeFragment extends Fragment {
     }
 
     private Bitmap queryContactImage(int imageDataRow) {
-        Cursor c = getActivity().getContentResolver().query(ContactsContract.Data.CONTENT_URI, new String[] {
+        Cursor c = getActivity().getContentResolver().query(ContactsContract.Data.CONTENT_URI, new String[]{
                 ContactsContract.CommonDataKinds.Photo.PHOTO
-        }, ContactsContract.Data._ID + "=?", new String[] {
+        }, ContactsContract.Data._ID + "=?", new String[]{
                 Integer.toString(imageDataRow)
         }, null);
         byte[] imageBytes = null;
@@ -253,11 +249,11 @@ public class HomeFragment extends Fragment {
         for (ContactInfo info : contactList) {
             Bitmap bitmap = queryContactImage((int) info.photoId);
 
-            if(bitmap == null){
+            if (bitmap == null) {
                 bitmap = BitmapFactory.decodeResource(getContext().getResources(), R.mipmap.ic_person);
             }
             bitmap = getRoundedCroppedBitmap(bitmap);
-            mfriendItems.add(new FriendItem(bitmap,info.displayName,info.phoneNumber, info.id, info.key));
+            mfriendItems.add(new FriendItem(bitmap, info.displayName, info.phoneNumber, info.id, info.key));
         }
         mRecyclerAdapter.setFriendList(mfriendItems);
     }
@@ -274,7 +270,7 @@ public class HomeFragment extends Fragment {
                 ContactsContract.Contacts.LOOKUP_KEY,
         };
 
-        String selection = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " LIKE '%" + name +"%'";
+        String selection = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " LIKE '%" + name + "%'";
         //Log.i("contact1", selection);
         String sortOrder = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " COLLATE LOCALIZED ASC";
 
@@ -310,7 +306,7 @@ public class HomeFragment extends Fragment {
         @Override
         public String toString() {
             return "ContactInfo{" +
-                    "id=" + String.valueOf(id) +
+                    "id=" + id +
                     ", displayName='" + displayName + '\'' +
                     ", phoneNumber='" + phoneNumber + '\'' +
                     ", photoId=" + photoId +
