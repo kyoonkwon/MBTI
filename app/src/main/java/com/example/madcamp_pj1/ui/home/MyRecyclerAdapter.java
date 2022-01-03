@@ -16,17 +16,11 @@ import java.util.ArrayList;
 
 public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.ViewHolder> {
 
+    static private OnItemClickListener mListener = null;
     private ArrayList<FriendItem> mFriendList;
 
-    public interface OnItemClickListener{
-        void onItemClick(View v, int position);
-        void onEditClick(View v, int position);
-        void onCallClick(View v, int position);
-        void onMsgClick(View v, int position);
-    }
-    static private OnItemClickListener mListener = null;
-    public void setOnItemClickListener(OnItemClickListener listener){
-        this.mListener = listener;
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        mListener = listener;
     }
 
     @NonNull
@@ -41,18 +35,28 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
         holder.onBind(mFriendList.get(position));
     }
 
-    public void setFriendList(ArrayList<FriendItem> list){
+    public void setFriendList(ArrayList<FriendItem> list) {
         this.mFriendList = list;
         notifyDataSetChanged();
     }
 
-    public FriendItem getItem(int position){
+    public FriendItem getItem(int position) {
         return mFriendList.get(position);
     }
 
     @Override
     public int getItemCount() {
         return mFriendList.size();
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(View v, int position);
+
+        void onEditClick(View v, int position);
+
+        void onCallClick(View v, int position);
+
+        void onMsgClick(View v, int position);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -75,8 +79,8 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
                 @Override
                 public void onClick(View view) {
                     int position = getAdapterPosition();
-                    if(position != RecyclerView.NO_POSITION){
-                        if(mListener != null){
+                    if (position != RecyclerView.NO_POSITION) {
+                        if (mListener != null) {
                             mListener.onItemClick(view, position);
                         }
                     }
@@ -87,8 +91,8 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
                 @Override
                 public void onClick(View view) {
                     int position = getAdapterPosition();
-                    if(position != RecyclerView.NO_POSITION){
-                        if(mListener != null){
+                    if (position != RecyclerView.NO_POSITION) {
+                        if (mListener != null) {
                             mListener.onCallClick(view, position);
                         }
                     }
@@ -99,8 +103,8 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
                 @Override
                 public void onClick(View view) {
                     int position = getAdapterPosition();
-                    if(position != RecyclerView.NO_POSITION){
-                        if(mListener != null){
+                    if (position != RecyclerView.NO_POSITION) {
+                        if (mListener != null) {
                             mListener.onMsgClick(view, position);
                         }
                     }
@@ -109,7 +113,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
 
         }
 
-        void onBind(FriendItem item){
+        void onBind(FriendItem item) {
             profile.setImageBitmap(item.getBitmap());
             name.setText(item.getName());
             message.setText(item.getMessage());

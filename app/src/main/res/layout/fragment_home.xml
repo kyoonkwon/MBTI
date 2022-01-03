@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.home.HomeFragment"
-    >
+    tools:context=".ui.home.HomeFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,37 +16,40 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:weightSum="10"
-            android:padding="10dp">
+            android:orientation="horizontal"
+            android:padding="10dp"
+            android:weightSum="10">
+
             <androidx.appcompat.widget.SearchView
                 android:id="@+id/searchView"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="8"
+                android:background="@drawable/bg_white_rounded"
                 app:iconifiedByDefault="false"
-                app:queryHint="@string/hint"
-                android:background="@drawable/bg_white_rounded"/>
+                app:queryHint="@string/hint" />
 
             <ImageButton
                 android:id="@+id/addContact"
-                android:layout_height="match_parent"
                 android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
                 android:background="#00000000"
-                android:src="@mipmap/ic_addcontact"
-                android:layout_weight="2"/>
+                android:src="@mipmap/ic_addcontact" />
         </LinearLayout>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginHorizontal="10dp"
-            android:background="#000"/>
+            android:background="#000" />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginHorizontal="10dp"
-            android:background="#000"/>
+            android:background="#000" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"

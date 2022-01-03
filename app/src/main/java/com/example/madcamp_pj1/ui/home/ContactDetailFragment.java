@@ -31,6 +31,9 @@ public class ContactDetailFragment extends Fragment {
     private TextView name;
     private TextView phone;
 
+    public static ContactDetailFragment newInstance() {
+        return new ContactDetailFragment();
+    }
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -42,10 +45,6 @@ public class ContactDetailFragment extends Fragment {
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
-    }
-
-    public static ContactDetailFragment newInstance() {
-        return new ContactDetailFragment();
     }
 
     @Nullable
@@ -88,9 +87,9 @@ public class ContactDetailFragment extends Fragment {
     }
 
     private void backAndRefreshParentFragment() {
-        List<Fragment> fragmentList =  getParentFragmentManager().getFragments();
-        for(Fragment fragment : fragmentList)
-            if(fragment.getClass() == HomeFragment.class){
+        List<Fragment> fragmentList = getParentFragmentManager().getFragments();
+        for (Fragment fragment : fragmentList)
+            if (fragment.getClass() == HomeFragment.class) {
                 ((HomeFragment) fragment).refreshShowDetail(getArguments().getInt("pos"));
                 break;
             }
@@ -100,9 +99,9 @@ public class ContactDetailFragment extends Fragment {
     }
 
     void delContact(FriendItem fi) {
-        List<Fragment> fragmentList =  getParentFragmentManager().getFragments();
-        for(Fragment fragment : fragmentList)
-            if(fragment.getClass() == HomeFragment.class){
+        List<Fragment> fragmentList = getParentFragmentManager().getFragments();
+        for (Fragment fragment : fragmentList)
+            if (fragment.getClass() == HomeFragment.class) {
                 ((HomeFragment) fragment).delContact(fi.getKey());
                 break;
             }
@@ -111,7 +110,7 @@ public class ContactDetailFragment extends Fragment {
         backToParentFragment();
     }
 
-    void fixContact(FriendItem fi){
+    void fixContact(FriendItem fi) {
 
         Uri selectedUri = ContactsContract.Contacts.getLookupUri(fi.getId(), fi.getKey());
         Intent editIntent = new Intent(Intent.ACTION_EDIT);

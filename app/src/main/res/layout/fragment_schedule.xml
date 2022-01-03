@@ -8,8 +8,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:weightSum="10"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:weightSum="10">
 
         <View
             android:layout_width="match_parent"
@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="5"
-            android:src="@drawable/circle"/>
+            android:src="@drawable/circle" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -30,26 +30,26 @@
             android:orientation="horizontal">
 
             <ImageButton
-                android:layout_marginLeft="20sp"
+                android:id="@+id/scheduleDelete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:scaleX="1.3"
-                android:scaleY="1.3"
-                android:background="@android:color/transparent"
-                android:id="@+id/scheduleDelete"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:src="@drawable/ic_trash"/>
+                android:layout_marginLeft="20sp"
+                android:background="@android:color/transparent"
+                android:scaleX="1.3"
+                android:scaleY="1.3"
+                android:src="@drawable/ic_trash" />
 
             <TextView
                 android:id="@+id/scheduleCurrnet"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_centerHorizontal="true"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:textSize="20sp"
                 android:textColor="@color/black"
-                android:layout_centerHorizontal="true"/>
+                android:textSize="20sp" />
 
             <ImageButton
                 android:id="@+id/scheduleAddBtn"
@@ -70,31 +70,31 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.6"
-            android:weightSum="10"
-            android:orientation="horizontal"
             android:layout_marginLeft="5sp"
             android:layout_marginRight="5sp"
-            android:background="@drawable/schedule_tab">
+            android:layout_weight="0.6"
+            android:background="@drawable/schedule_tab"
+            android:orientation="horizontal"
+            android:weightSum="10">
 
             <View
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"/>
+                android:layout_weight="1" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_weight="7.5"
-                android:layout_gravity="center"
-                android:text="일정"/>
+                android:text="일정" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_gravity="center"
-                android:text="알림"/>
+                android:layout_weight="1"
+                android:text="알림" />
 
         </LinearLayout>
 
@@ -106,18 +106,7 @@
             android:layout_weight="3.2" />
 
 
-
-
-
-
-
     </LinearLayout>
-
-
-
-
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,7 +13,7 @@ public class Schedule {
 
     SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 
-    public Schedule(String name, Date startTime, Date endTime, boolean alarm){
+    public Schedule(String name, Date startTime, Date endTime, boolean alarm) {
         this.name = name;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -24,6 +24,10 @@ public class Schedule {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getStartTimeAsString() {
         return sdf.format(startTime);
     }
@@ -32,31 +36,27 @@ public class Schedule {
         return sdf.format(endTime);
     }
 
-    public boolean getAlarm(){
+    public boolean getAlarm() {
         return alarm;
+    }
+
+    public void setAlarm(boolean alarm) {
+        this.alarm = alarm;
     }
 
     public Date getStartTime() {
         return startTime;
     }
 
-    public Date getEndTime() {
-        return endTime;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }
 
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
+    public Date getEndTime() {
+        return endTime;
     }
 
-    public void setAlarm(boolean alarm) {
-        this.alarm = alarm;
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 }

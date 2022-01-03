@@ -33,13 +33,13 @@ import java.util.Date;
 public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHolder> {
 
     private ArrayList<Schedule> mScheduleList;
-    private  Activity m_activity ;
+    private final Activity m_activity;
 
-    public ScheduleAdapter(Activity activity){
-        m_activity=activity;
+    public ScheduleAdapter(Activity activity) {
+        m_activity = activity;
     }
 
-    public ScheduleAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
+    public ScheduleAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_schedule, parent, false);
         return new ViewHolder(view);
     }
@@ -54,7 +54,10 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
         return mScheduleList.size();
     }
 
-    public Schedule getItem(int position) {return mScheduleList.get(position); }
+    public Schedule getItem(int position) {
+        return mScheduleList.get(position);
+    }
+
     public void setScheduleList(ArrayList<Schedule> list) {
         this.mScheduleList = list;
         notifyDataSetChanged();
@@ -73,9 +76,9 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
 
         Log.e("TAG", title);
 
-        when = getTime.concat(" "+ when).concat(":00");
+        when = getTime.concat(" " + when).concat(":00");
         Date datetime = dateFormat.parse(when);
-        Log.e("NOTI","SET:"+datetime.toString());
+        Log.e("NOTI", "SET:" + datetime.toString());
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(datetime);
         AlarmManager alarmManager = (AlarmManager) m_activity.getSystemService(Context.ALARM_SERVICE);
@@ -92,14 +95,14 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
         alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(), pendingIntent);
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder{
+    class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView name;
         TextView time;
         @SuppressLint("UseSwitchCompatOrMaterialCode")
         Switch swtich;
 
-        public ViewHolder(@NonNull View itemView){
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             name = itemView.findViewById(R.id.itemScheduleName);
@@ -110,10 +113,10 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
                 @RequiresApi(api = Build.VERSION_CODES.O)
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if(buttonView.isChecked()){
+                    if (buttonView.isChecked()) {
                         Log.e("SWITCH", "ON");
                         String HHMM = (String) time.getText();
-                        HHMM = HHMM.substring(0,5);
+                        HHMM = HHMM.substring(0, 5);
                         try {
                             setNotification(HHMM, (String) name.getText());
                         } catch (ParseException e) {
@@ -121,7 +124,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
                         }
                     } else {
                         Log.e("SWITCH", "OFF");
-                        cancelNotification( (String)name.getText());
+                        cancelNotification((String) name.getText());
                     }
                 }
             });
@@ -129,13 +132,13 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
         }
 
         @RequiresApi(api = Build.VERSION_CODES.O)
-        private void cancelNotification(String title){
-            NotificationManager manager = (NotificationManager)m_activity.getSystemService(Context.NOTIFICATION_SERVICE);
+        private void cancelNotification(String title) {
+            NotificationManager manager = (NotificationManager) m_activity.getSystemService(Context.NOTIFICATION_SERVICE);
             manager.deleteNotificationChannel(title);
         }
 
 
-        void onBind(Schedule item){
+        void onBind(Schedule item) {
             name.setText(item.getName());
             String fromto = item.getStartTimeAsString() + " - " + item.getEndTimeAsString();
             time.setText(fromto);
