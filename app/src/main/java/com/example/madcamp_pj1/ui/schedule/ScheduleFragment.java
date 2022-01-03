@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -406,6 +407,8 @@ public class ScheduleFragment extends Fragment {
 
         Paint textPaint = new Paint();
         textPaint.setColor(0xFF000000);
+        Typeface face = Typeface.createFromAsset(getActivity().getAssets(),"fonts/pnm.otf");
+        textPaint.setTypeface(face);
         textPaint.setTextSize(fontSize);
         textPaint.setTextAlign(Paint.Align.CENTER);
 
