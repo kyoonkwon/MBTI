@@ -29,18 +29,6 @@
             android:layout_weight="0.7"
             android:orientation="horizontal">
 
-            <ImageButton
-                android:id="@+id/scheduleDelete"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="20sp"
-                android:background="@android:color/transparent"
-                android:scaleX="1.3"
-                android:scaleY="1.3"
-                android:src="@drawable/ic_trash" />
-
             <TextView
                 android:id="@+id/scheduleCurrnet"
                 android:layout_width="wrap_content"
@@ -77,16 +65,19 @@
             android:orientation="horizontal"
             android:weightSum="10">
 
-            <View
+            <TextView
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
+                android:layout_height="wrap_content"
+                android:text="삭제"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_weight="1.5" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_weight="7.5"
+                android:layout_weight="6.5"
                 android:text="일정" />
 
             <TextView

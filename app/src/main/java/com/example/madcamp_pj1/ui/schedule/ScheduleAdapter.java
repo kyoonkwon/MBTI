@@ -14,7 +14,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -23,6 +25,7 @@ import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.madcamp_pj1.R;
+import com.example.madcamp_pj1.ui.home.MyRecyclerAdapter;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -34,10 +37,18 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
 
     private ArrayList<Schedule> mScheduleList;
     private final Activity m_activity;
+    static private OnItemClickListener mListener = null;
 
     public ScheduleAdapter(Activity activity) {
         m_activity = activity;
     }
+
+    public interface OnItemClickListener {
+        void onDeleteClick(View v, int position);
+        void onSwitchClick(View v, int position, boolean isChekced);
+    }
+
+    public void setOnItemCLickListener(OnItemClickListener listener) {mListener = listener; }
 
     public ScheduleAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_schedule, parent, false);
@@ -60,6 +71,11 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
 
     public void setScheduleList(ArrayList<Schedule> list) {
         this.mScheduleList = list;
+        notifyDataSetChanged();
+    }
+
+    public void setScheduleItem(int position, Schedule schedule){
+        this.mScheduleList.set(position, schedule);
         notifyDataSetChanged();
     }
 
@@ -106,6 +122,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
         TextView time;
         @SuppressLint("UseSwitchCompatOrMaterialCode")
         Switch swtich;
+        ImageButton delete;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -113,11 +130,14 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
             name = itemView.findViewById(R.id.itemScheduleName);
             time = itemView.findViewById(R.id.itemScheduleTime);
             swtich = itemView.findViewById(R.id.itemScheduleSwitch);
+            delete = itemView.findViewById(R.id.scheduleRemove);
+
 
             swtich.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @RequiresApi(api = Build.VERSION_CODES.O)
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    mListener.onSwitchClick(buttonView, getAdapterPosition(), isChecked);
                     if (buttonView.isChecked()) {
                         Log.e("SWITCH", "ON");
                         String HHMM = (String) time.getText();
@@ -131,6 +151,13 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
                         Log.e("SWITCH", "OFF");
                         cancelNotification((String) name.getText());
                     }
+                }
+            });
+
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mListener.onDeleteClick(view, getAdapterPosition());
                 }
             });
 

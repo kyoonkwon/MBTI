@@ -113,7 +113,7 @@ public class ScheduleFragment extends Fragment {
                 String endTime = result.getString("endTime");
                 Boolean isAlarm = result.getBoolean("alarm");
 
-                Log.i("log1", name + startTime + endTime + isAlarm);
+                //Log.i("log1 add Schedule", name + startTime + endTime + isAlarm);
                 try {
                     schedules.add(new Schedule(name, sdf.parse(startTime), sdf.parse(endTime), isAlarm));
                     Collections.sort(schedules);
@@ -193,6 +193,27 @@ public class ScheduleFragment extends Fragment {
         scheduleAddBtn = view.findViewById(R.id.scheduleAddBtn);
         scheduleAddBtn.setOnClickListener(v -> new DialogFragment().show(getChildFragmentManager(), "dialog"));
 
+        adapter.setOnItemCLickListener(new ScheduleAdapter.OnItemClickListener() {
+            @Override
+            public void onDeleteClick(View v, int position) {
+                schedules.remove(position);
+                adapter.setScheduleList(schedules);
+                setArrayListPref(schedules);
+                reDraw();
+            }
+
+            @Override
+            public void onSwitchClick(View v, int position, boolean isChecked) {
+
+                Schedule s = adapter.getItem(position);
+                Log.i("log1 switch", s.getName());
+                s.setAlarm(isChecked);
+//                adapter.setScheduleItem(position, s);
+                schedules.set(position, s);
+//                adapter.setScheduleList(schedules);
+                setArrayListPref(schedules);
+            }
+        });
 
     }
 
@@ -249,7 +270,7 @@ public class ScheduleFragment extends Fragment {
 
         Paint paint = new Paint();
         paint.setColor(0xFFFFFFFF);
-        SchedulerCanvas.drawCircle(canvasWidth / 2, canvasHeight / 2, canvasHeight / 2 - 250, paint);
+        SchedulerCanvas.drawCircle(canvasWidth / 2, canvasHeight / 2, canvasHeight / 2 - 125, paint);
 
 
         int[] colors = {0xffffafb0, 0xffffafd8, 0xffeeb7b4, 0xfff2cfa5, 0xfffcffb0, 0xffaee4ff};
