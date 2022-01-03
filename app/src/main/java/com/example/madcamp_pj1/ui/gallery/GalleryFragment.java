@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -18,6 +19,7 @@ import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -156,16 +158,15 @@ public class GalleryFragment extends Fragment {
         Activity activity = getActivity();
         Context context = getContext();
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setTitle("이미지 가져오기");
-        builder.setMessage("어디서 가져올지 정하세용");
+        builder.setMessage("새로 스크랩 하기");
 
-        builder.setNegativeButton("카메라", (dialog, which) -> {
+        builder.setNegativeButton("카메라로 찍기", (dialog, which) -> {
             getCameraPermission(activity, context);
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             startActivityForResult(intent, CAMERA_REQUEST);
         });
 
-        builder.setPositiveButton("갤러리", (dialog, which) -> {
+        builder.setPositiveButton("갤러리에서 가져오기", (dialog, which) -> {
             getGalleryPermission(activity, context);
             Intent intent = new Intent();
             intent.setType("image/*");
@@ -173,10 +174,31 @@ public class GalleryFragment extends Fragment {
             startActivityForResult(intent, GALLERY_REQUEST);
         });
 
-        builder.setNeutralButton("취소", (dialog, which) -> Toast.makeText(context, "Cancel Click", Toast.LENGTH_SHORT).show());
+        builder.setNeutralButton("취소", (dialog, which) -> Toast.makeText(context, "취소", Toast.LENGTH_SHORT).show());
 
         AlertDialog dialog = builder.create();
+
+        Typeface face = Typeface.createFromAsset(getActivity().getAssets(),"fonts/pnm.otf");
+
         dialog.show();
+
+        TextView title = dialog.findViewById(android.R.id.message);
+        title.setTextSize(20);
+        title.setTypeface(face);
+
+        TextView button = dialog.findViewById(android.R.id.button1);
+        button.setTypeface(face);
+        button.setTextColor(0xFF000000);
+
+        button = dialog.findViewById(android.R.id.button2);
+        button.setTypeface(face);
+        button.setTextColor(0xFF000000);
+
+        button = dialog.findViewById(android.R.id.button3);
+        button.setTypeface(face);
+        button.setTextColor(0xFF000000);
+
+
     }
 
     @SuppressLint({"ClickableViewAccessibility", "WrongThread"})

@@ -11,6 +11,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -19,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -42,12 +44,15 @@ public class HomeFragment extends Fragment {
     private String searchText;
 
 
+
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+
         searchText = "";
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
@@ -112,6 +117,10 @@ public class HomeFragment extends Fragment {
         getContactListAsLog();
 
         searchView = view.findViewById(R.id.searchView);
+        int id = androidx.appcompat.R.id.search_src_text; //searchView.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
+        TextView searchViewText = (TextView) searchView.findViewById(id);
+        Typeface myCustomFont = Typeface.createFromAsset(getActivity().getAssets(),"fonts/pnm.otf");
+        searchViewText.setTypeface(myCustomFont);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
