@@ -65,12 +65,8 @@
 
 *Time schedules* 탭은 원형 스케줄러의 방식으로 사용자가 일정을 직접 관리하는 기능을 제공합니다.
 
-<figure align="center">
-    <img src="./src/schedule_main.jpg" width="24%">
-    <img src="./src/schedule_pick.jpg" width="24%">
-    <img src="./src/schedule_add.gif" width="24%">
-    <img src="./src/schedule_alarm.gif" width="24%">
-</figure>
+|<img src="./src/schedule_main.jpg" width=220> |<img src="./src/schedule_pick.jpg"  width=220> |<img src="./src/schedule_add.gif" width=220> |<img src="./src/schedule_alarm.gif" width=220>| 
+| :-: | :-: | :-: | :-: |
 
 1. 현재 시각을 스케줄러의 외각바가 채워진 정도로 표현하고, 현재 시각과 해당하는 일정을 스케줄러 아래쪽에 표시
 2. 각 일정을 클릭할 경우, 스케줄러에서 확인하기 쉽도록 해당 일정만 표시
@@ -81,11 +77,9 @@
 
 *Interaction* 탭은 스마트폰 연락처의 기능을 제공합니다.
 
-<figure align="center">
-    <img src="./src/int_main.jpg" width="24%">
-    <img src="./src/int_search.jpg" width="24%">
-    <img src="./src/int_detail.jpg" width="24%">
-</figure>
+|<img src="./src/int_main.jpg" width=220> |<img src="./src/int_search.jpg"  width=220> |<img src="./src/int_detail.jpg" width=220> | 
+| :-: | :-: | :-: |
+
 
 1. 스마트폰에 저장된 연락처를 불러와서 이미지, 이름, 번호를 표시하고, 우측의 전화/메시지 버튼을 통하여 해당 기능을 연결
 2. 우측 상단의 연락처 추가 아이콘을 통하여 연락처 추가를 하는 기능을 연결
