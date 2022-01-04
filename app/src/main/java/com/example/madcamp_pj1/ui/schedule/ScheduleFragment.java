@@ -71,6 +71,8 @@ public class ScheduleFragment extends Fragment {
     private final int canvasWidth = 1024;
     private final int canvasHeight = 1024;
     private TimerTask timerTask;
+    private Schedule drawn;
+    private View lastSelected;
 
     SharedPreferences sharedPref;
 
@@ -146,6 +148,8 @@ public class ScheduleFragment extends Fragment {
         SchedulerCanvas = new Canvas(schedulerBitmap);
         curScheduleView = view.findViewById(R.id.scheduleCurrnet);
         currentTime = Calendar.getInstance().getTime();
+        drawn = null;
+        lastSelected = null;
 
         drawTimeBar();
         scheduler.setImageDrawable(new BitmapDrawable(getResources(), schedulerBitmap));
@@ -188,7 +192,7 @@ public class ScheduleFragment extends Fragment {
         }
 
         for (Schedule schedule : schedules) {
-            writeSchedule(schedule);
+            //writeSchedule(schedule);
         }
 
         scheduleAddBtn = view.findViewById(R.id.scheduleAddBtn);
@@ -213,6 +217,32 @@ public class ScheduleFragment extends Fragment {
                 schedules.set(position, s);
 //                adapter.setScheduleList(schedules);
                 setArrayListPref(schedules);
+            }
+
+            @Override
+            public void onItemClick(View v, int position, View itemV) {
+
+                Log.i("log1 item", "Clicked");
+                Schedule s = adapter.getItem(position);
+                if (drawn != s) {
+
+                    drawn = s;
+                    if(lastSelected != null)
+                        lastSelected.setBackgroundResource(R.drawable.border);
+                    lastSelected = itemV;
+                    Paint paint = new Paint();
+                    paint.setColor(0xFFFFFFFF);
+                    SchedulerCanvas.drawCircle(canvasWidth / 2, canvasHeight / 2, canvasHeight / 2 - 125, paint);
+                    drawSchedule(s, 0xffffafb0);
+                    //writeSchedule(s);
+                    itemV.setBackgroundResource(R.drawable.schedule_tab);
+                    Log.i("log1 item", "end");
+                }else{
+                    reDraw();
+                    drawn = null;
+                    lastSelected.setBackgroundResource(R.drawable.border);
+                }
+                view.invalidate();
             }
         });
 
@@ -286,9 +316,6 @@ public class ScheduleFragment extends Fragment {
             i = (i + 1) % colors.length;
         }
 
-        for (Schedule schedule : schedules) {
-            writeSchedule(schedule);
-        }
     }
 
 
@@ -369,7 +396,7 @@ public class ScheduleFragment extends Fragment {
 
 
         }
-
+        writeSchedule(schedule);
     }
 
     private void writeSchedule(Schedule schedule) {
