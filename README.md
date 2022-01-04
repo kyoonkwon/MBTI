@@ -274,9 +274,9 @@ alertDialog로 dialog에서 버튼 클릭을 통해, 각각 카메라, 갤러리
 
 1. 원형 스케줄러
 
-    원형 스케줄러는 스케줄러 외각 부분과 내부 부분으로 나누어 Canvas 위에 그리는 방식으로 구현
+    원형 스케줄러는 스케줄러 외각 부분과 내부 부분으로 나누어 Canvas 위에 그리는 방식으로 구현하였습니다.
 
-    외각 부분은 현재 시각을 백분율로 계산하여 그 값에 해당하는 각도만큼 호를 그려, 매 초마다 갱신하도록 함.
+    외각 부분은 현재 시각을 백분율로 계산하여 그 값에 해당하는 각도만큼 호를 그려, 매 초마다 갱신하도록 하였습니다.
 
     ```java
     int percent = (60 * Integer.parseInt(hourFormat.format((currentTime))) + Integer.parseInt(minFormat.format((currentTime)))) / 4;
@@ -284,7 +284,7 @@ alertDialog로 dialog에서 버튼 클릭을 통해, 각각 카메라, 갤러리
     SchedulerCanvas.drawArc(barWidth + 20, barWidth + 20, canvasWidth - barWidth - 20, canvasHeight - barWidth - 20, -90, percent, false, paint);
     ```
 
-     내부 부분은 저장된 일정에서 시작 시간과 종료 시간을 각도로 계산하여 부채꼴을 그리고, 각의 중앙값을 이용하여 좌표를 계산하여 일정 이름을 부채꼴 위에 표현하였음.
+     내부 부분은 저장된 일정에서 시작 시간과 종료 시간을 각도로 계산하여 부채꼴을 그리고, 각의 중앙값을 이용하여 좌표를 계산하여 일정 이름을 부채꼴 위에 표현하였습니다.
 
     ```java
         int posx = (int) (canvasWidth / 2 + r * Math.cos(Math.toRadians(middleAngle - 90)));
@@ -295,7 +295,7 @@ alertDialog로 dialog에서 버튼 클릭을 통해, 각각 카메라, 갤러리
 
 2. 일정 표시
 
-    앱을 종료해도 일정 정보가 유지될 수 있도록 *SharedPreferences*를 이용하여 JSON -> String 형식으로 저장하고 반대로 불러와서 사용하였음.
+    앱을 종료해도 일정 정보가 유지될 수 있도록 *SharedPreferences*를 이용하여 JSON -> String 형식으로 저장하고 반대로 불러와서 사용하였습니다.
     ```java
     void setArrayListPref(ArrayList<Schedule> schedules){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -321,12 +321,12 @@ alertDialog로 dialog에서 버튼 클릭을 통해, 각각 카메라, 갤러리
             ... 
     }
     ```
-    getArrayListPref()를 통해서 얻은 일정 데이터를 *recycler view*에 나타내었음.
+    getArrayListPref()를 통해서 얻은 일정 데이터를 *recycler view*에 나타내었습니다.
 
 
 3. 일정 추가 및 삭제
 
-    일정 추가의 경우 중앙 우측의 + 버튼을 터치할 경우 *dialog*를 통하여 일정을 추가할 수 있도록 함. *dialog*가 닫힐 때 입력 값을 이전 *fragment*에 전달하여 새 일정 오브젝트를 생성하여 *recycler view*의 *adapter*에 추가하고 스케줄러를 다시 그리도록 함
+    일정 추가의 경우 중앙 우측의 + 버튼을 터치할 경우 *dialog*를 통하여 일정을 추가할 수 있도록 하였습니다. *dialog*가 닫힐 때 입력 값을 이전 *fragment*에 전달하여 새 일정 오브젝트를 생성하여 *recycler view*의 *adapter*에 추가하고 스케줄러를 다시 그리도록 하였습니다.
     ```java
     scheduleAddBtn.setOnClickListener(v -> new DialogFragment().show(getChildFragmentManager(), "dialog"));
 
@@ -345,7 +345,7 @@ alertDialog로 dialog에서 버튼 클릭을 통해, 각각 카메라, 갤러리
 
     ```
 
-    일정 추가 *dialog*에서 시간 범위를 설정하는 time picker의 경우에는 해당 [라이브러리](https://github.com/Droppers/TimeRangePicker)를 이용하여 구현하였음. 스케줄러를 만드는데 있어서 날짜가 바뀌는 시간 범위를 허용하지 않게 하기 위해서, 종료 시간이 시작 시간보다 앞서게 되는 경우 두 위치를 강제로 바꾸도록 하였음.
+    일정 추가 *dialog*에서 시간 범위를 설정하는 time picker의 경우에는 해당 [라이브러리](https://github.com/Droppers/TimeRangePicker)를 이용하여 구현하였습니다. 스케줄러를 만드는데 있어서 날짜가 바뀌는 시간 범위를 허용하지 않게 하기 위해서, 종료 시간이 시작 시간보다 앞서게 되는 경우 두 위치를 강제로 바꾸도록 하였습니다.
 
     ```java
     @Override
@@ -364,7 +364,7 @@ alertDialog로 dialog에서 버튼 클릭을 통해, 각각 카메라, 갤러리
     }
     ```
 
-    위 라이브러리에서 *setEndTime* 메서드에 오류가 있어서 *setEndTimeMinute*로 해결함.
+    위 라이브러리에서 *setEndTime* 메서드에 오류가 있어서 *setEndTimeMinute*로 해결하였습니다.
 
 4. 알림 기능
 
@@ -488,7 +488,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
 1. 연락처 불러오기
 
-    연락처 정보는 쿼리를 아래와 같이 정의한 후, 얻은 결과를 바탕으로 정의한 연락처 오브젝트를 생성. 생성된 결과를 *recycler view*에 나타냄.
+    연락처 정보는 쿼리를 아래와 같이 정의한 후, 얻은 결과를 바탕으로 정의한 연락처 오브젝트를 생성하였습니다. 생성된 결과를 *recycler view*에 나타내었습니다.
 
     ```java
     Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
@@ -507,7 +507,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
 2. 연락처 검색
 
-    검색창(*searchView*)에 입력할 경우, text change listener에서 입력된 값으로 위의 연락처 불러오기를 수행하여 일치하는 값으로 *recycler view*를 업데이트함.
+    검색창(*searchView*)에 입력할 경우, text change listener에서 입력된 값으로 위의 연락처 불러오기를 수행하여 일치하는 값으로 *recycler view*를 업데이트하였습니다.
     
     ```java
     searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -524,7 +524,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
 3. 연락처 상세보기
 
-    특정 연락처를 터치할 경우, 세부 연락처 정보를 표시하는 *fragment*를 띄우도록 함. 이 때 *recycler view*에 연결된 *adapter*로부터 선택된 연락처 정보를 *bundle*에 담아서 *ContactDetail fragment*로 전달하였음.
+    특정 연락처를 터치할 경우, 세부 연락처 정보를 표시하는 *fragment*를 띄우도록 하였습니다. 이 때 *recycler view*에 연결된 *adapter*로부터 선택된 연락처 정보를 *bundle*에 담아서 *ContactDetail fragment*로 전달하였습니다.
 
     ```java
     FriendItem fi = mRecyclerAdapter.getItem(i);
@@ -544,9 +544,9 @@ public class AlarmReceiver extends BroadcastReceiver {
 
 4. 연락처 추가/수정/삭제
 
-    연락처 추가는 메인 화면에서, 수정 및 삭제는 상세보기 화면에서 이루어지나 해당 기능들의 방법은 유사하게 구현하였음. 
+    연락처 추가는 메인 화면에서, 수정 및 삭제는 상세보기 화면에서 이루어지나 해당 기능들의 방법은 유사하게 구현하였습니다.
     
-    [안드로이드 개발자 문서](https://developer.android.com/training/contacts-provider/modify-data?hl=ko)에서 권장하는대로 삭제를 제외하고는 가급적 연락처 제공자에 직접 접근하지 않고, *Intent*를 사용하여 연락처 *Activity*를 실행시켰음.
+    [안드로이드 개발자 문서](https://developer.android.com/training/contacts-provider/modify-data?hl=ko)에서 권장하는대로 삭제를 제외하고는 가급적 연락처 제공자에 직접 접근하지 않고, *Intent*를 사용하여 연락처 *Activity*를 실행시켰습니다.
 
     ```java
         Intent intent = new Intent(ContactsContract.Intents.Insert.ACTION);
