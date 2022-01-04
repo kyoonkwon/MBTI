@@ -61,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
     @SuppressLint("WrongThread")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.Theme_Madcamppj1);
+
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
