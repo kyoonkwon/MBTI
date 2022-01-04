@@ -25,6 +25,7 @@
 #### Load Image
 
 새로운 글을 가져오려면, 첫번째 카메라 이미지를 클릭합니다.
+
 <img src = "./src/camera_click.gif" width="200" />
 
 ##### Load From Camera
@@ -241,9 +242,9 @@ alertDialog로 dialog에서 버튼 클릭을 통해, 각각 카메라, 갤러리
 
 <code>google api package</code> 에서 함수를 import하여, bitmap 데이터를 http요청으로 보내고, 응답을 받아와 String으로 파싱을 진행합니다.
 
-메모 텍스트는 editText로 입력 받고, 확인 버튼을 누를 시 메모 텍스트와 OCR text가 저장됩니다.
+메모 텍스트는 editText로 입력 받고, 확인 버튼을 누를 시 메모 텍스트와 OCR 텍스트가 저장됩니다.
 
-삭제 버튼을 누르면, 이미지 파일, 썸네일 파일에 더하여 만약 있다면, OCR, memoe 텍스트도 삭제됩니다.
+삭제 버튼을 누르면, 이미지 파일, 썸네일 파일에 더하여 만약 있다면, OCR, memo 텍스트도 삭제됩니다.
 
 ### Time schedules
 
@@ -252,7 +253,7 @@ alertDialog로 dialog에서 버튼 클릭을 통해, 각각 카메라, 갤러리
 
 ## How To Use.
 
-Github Actions를 이용하여 main branch에 commit, pull request시 자동으로 build 후 apk파일을 생성합니다.
+Github Actions가 main branch에 commit, pull request이 발생하면 자동으로 build 후 apk파일을 생성합니다.
 
 ![github_actions](./src/github_actions.png)
 
