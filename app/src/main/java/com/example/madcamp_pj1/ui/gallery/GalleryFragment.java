@@ -178,7 +178,7 @@ public class GalleryFragment extends Fragment {
 
         AlertDialog dialog = builder.create();
 
-        Typeface face = Typeface.createFromAsset(getActivity().getAssets(),"fonts/pnm.otf");
+        Typeface face = Typeface.createFromAsset(getActivity().getAssets(), "fonts/pnm.otf");
 
         dialog.show();
 

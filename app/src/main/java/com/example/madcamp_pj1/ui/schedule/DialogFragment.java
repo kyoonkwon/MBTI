@@ -2,10 +2,7 @@ package com.example.madcamp_pj1.ui.schedule;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -18,8 +15,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
 import com.example.madcamp_pj1.R;
-
-import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 
@@ -48,7 +43,7 @@ public class DialogFragment extends androidx.fragment.app.DialogFragment {
         startTimeView.setText(sdf.format(trp.getStartTime().getCalendar().getTime()));
         endTimeView.setText(sdf.format(trp.getEndTime().getCalendar().getTime()));
 
-        trp.setOnTimeChangeListener(new TimeRangePicker.OnTimeChangeListener(){
+        trp.setOnTimeChangeListener(new TimeRangePicker.OnTimeChangeListener() {
 
             @Override
             public void onStartTimeChange(@NonNull TimeRangePicker.Time time) {
@@ -78,8 +73,7 @@ public class DialogFragment extends androidx.fragment.app.DialogFragment {
                 TimeRangePicker.Time endTime = trp.getEndTime();
 
 
-
-                if(sdf.format(startTime.getCalendar().getTime()).compareTo(sdf.format(endTime.getCalendar().getTime())) > 0){
+                if (sdf.format(startTime.getCalendar().getTime()).compareTo(sdf.format(endTime.getCalendar().getTime())) > 0) {
 
                     trp.setStartTimeMinutes(endTime.getTotalMinutes());
                     trp.setEndTimeMinutes(startTime.getTotalMinutes());
@@ -93,7 +87,6 @@ public class DialogFragment extends androidx.fragment.app.DialogFragment {
                 }
 
 
-
             }
         });
 
@@ -103,7 +96,7 @@ public class DialogFragment extends androidx.fragment.app.DialogFragment {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(scheduleName.getText().length() == 0){
+                if (scheduleName.getText().length() == 0) {
                     Toast.makeText(getContext(), "일정 이름을 입력해주세요", Toast.LENGTH_SHORT).show();
                     return;
                 }
