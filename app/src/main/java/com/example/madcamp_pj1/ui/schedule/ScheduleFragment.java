@@ -108,6 +108,11 @@ public class ScheduleFragment extends Fragment {
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
                 String name = result.getString("name");
                 String startTime = result.getString("startTime");
+                try {
+                    ScheduleAdapter.setNotification(startTime, name, getActivity());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 String endTime = result.getString("endTime");
                 Boolean isAlarm = result.getBoolean("alarm");
 

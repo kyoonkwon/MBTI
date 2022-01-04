@@ -82,7 +82,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
         notifyDataSetChanged();
     }
 
-    private void setNotification(String when, String title) throws ParseException {
+    public static void setNotification(String when, String title, Activity m_activity) throws ParseException {
 
         Intent receiverIntent = new Intent(m_activity, AlarmReceiver.class);
         receiverIntent.putExtra("title", title);
@@ -146,7 +146,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
                         String HHMM = (String) time.getText();
                         HHMM = HHMM.substring(0, 5);
                         try {
-                            setNotification(HHMM, (String) name.getText());
+                            setNotification(HHMM, (String) name.getText(), m_activity);
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }

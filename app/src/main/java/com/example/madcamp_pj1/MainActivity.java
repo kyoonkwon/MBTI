@@ -61,6 +61,23 @@ public class MainActivity extends AppCompatActivity {
     @SuppressLint("WrongThread")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            String[] permissions = new String[]{Manifest.permission.READ_CONTACTS};
+            ActivityCompat.requestPermissions(this, permissions, 100);
+        }
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            String[] permissions = new String[]{Manifest.permission.WRITE_CONTACTS};
+            ActivityCompat.requestPermissions(this, permissions, 100);
+        }
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         setTheme(R.style.Theme_Madcamppj1);
 
         super.onCreate(savedInstanceState);
@@ -108,15 +125,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-            String[] permissions = new String[]{Manifest.permission.READ_CONTACTS};
-            ActivityCompat.requestPermissions(this, permissions, 100);
-        }
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-            String[] permissions = new String[]{Manifest.permission.WRITE_CONTACTS};
-            ActivityCompat.requestPermissions(this, permissions, 100);
-        }
 
 
     }
