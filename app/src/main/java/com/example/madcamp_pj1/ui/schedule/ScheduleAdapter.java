@@ -49,6 +49,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
     public interface OnItemClickListener {
         void onDeleteClick(View v, int position);
         void onSwitchClick(View v, int position, boolean isChekced);
+        void onItemClick(View v, int position, View itemView);
     }
 
     public void setOnItemCLickListener(OnItemClickListener listener) {mListener = listener; }
@@ -134,6 +135,13 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
             time = itemView.findViewById(R.id.itemScheduleTime);
             swtich = itemView.findViewById(R.id.itemScheduleSwitch);
             delete = itemView.findViewById(R.id.scheduleRemove);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mListener.onItemClick(view, getAdapterPosition(), itemView);
+                }
+            });
 
 
             swtich.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
