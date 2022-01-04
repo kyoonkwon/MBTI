@@ -30,11 +30,13 @@
 ##### Load From Camera
 
 <img src = "./src/load_camera.gif" width="200" />
+
 카메라로 찍어서 글귀를 가져올 수 있습니다.
 
 ##### Load From Gallery
 
-<img src = "./src/load_galery.gif" width="200" />
+<img src = "./src/load_gallery.gif" width="200" />
+
 이미 갤러리에 존재하는 글을 새로 가져올 수도 있습니다.
 
 #### Get Text
