@@ -292,7 +292,6 @@ public class HomeFragment extends Fragment {
         };
 
         String selection = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " LIKE '%" + name + "%'";
-        //Log.i("contact1", selection);
         String sortOrder = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " COLLATE LOCALIZED ASC";
 
         Cursor cursor = getActivity().getContentResolver().query(uri, projection, selection, null, sortOrder);

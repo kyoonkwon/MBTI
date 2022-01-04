@@ -81,7 +81,7 @@ public class ScheduleFragment extends Fragment {
             }
         };
         Timer timer = new Timer();
-        timer.schedule(timerTask, 0, 10000);
+        timer.schedule(timerTask, 0, 1000);
     }
 
     protected void Update() {
@@ -426,11 +426,11 @@ public class ScheduleFragment extends Fragment {
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            double posx = canvasWidth / 2 + r * Math.cos(Math.toRadians(middleAngle - 90));
-            double posy = canvasHeight / 2 + r * Math.sin(Math.toRadians(middleAngle - 90));
+            int posx = (int) (canvasWidth / 2 + r * Math.cos(Math.toRadians(middleAngle - 90)));
+            int posy = (int) (canvasHeight / 2 + r * Math.sin(Math.toRadians(middleAngle - 90)));
 
 
-            SchedulerCanvas.drawText(schedule.getName(), (int) posx, (int) posy + 10, textPaint);
+            SchedulerCanvas.drawText(schedule.getName(), posx, posy + 10, textPaint);
 
 
         }
