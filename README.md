@@ -4,6 +4,8 @@
 
 ## Summary.
 
+![splash!](./src/splash.gif)
+
 라이프 스타일을 관리하기 위한 3가지 탭이 있는 애플리케이션.
 
 ### Books
@@ -61,7 +63,7 @@
 
 ### Time schedules
 
-*Time schedules* 탭은 원형 스케줄러의 방식으로 사용자가 일정을 직접 관리하는 기능을 제공
+*Time schedules* 탭은 원형 스케줄러의 방식으로 사용자가 일정을 직접 관리하는 기능을 제공합니다.
 
 <figure align="center">
     <img src="./src/schedule_main.jpg" width="24%">
@@ -73,11 +75,11 @@
 1. 현재 시각을 스케줄러의 외각바가 채워진 정도로 표현하고, 현재 시각과 해당하는 일정을 스케줄러 아래쪽에 표시
 2. 각 일정을 클릭할 경우, 스케줄러에서 확인하기 쉽도록 해당 일정만 표시
 3. 일정 추가는 일정 이름, 시작 시간, 종료 시간, 알림 여부 설정하여 등록
-4. 알림 설정 시, 일정이 시작하는 시간에 알림이 오도록 함
+4. 알림 설정 시, 일정이 시작하는 시간에 알림이 발생
 
 ### Interaction
 
-*Interaction* 탭은 스마트폰 연락처의 기능을 제공
+*Interaction* 탭은 스마트폰 연락처의 기능을 제공합니다.
 
 <figure align="center">
     <img src="./src/int_main.jpg" width="24%">
@@ -87,9 +89,9 @@
 
 1. 스마트폰에 저장된 연락처를 불러와서 이미지, 이름, 번호를 표시하고, 우측의 전화/메시지 버튼을 통하여 해당 기능을 연결
 2. 우측 상단의 연락처 추가 아이콘을 통하여 연락처 추가를 하는 기능을 연결
-3. 기존 연락처에 저장된 이미지가 없을 경우 기본 이미지를 표시하도록 함
+3. 기존 연락처에 저장된 이미지가 없을 경우 기본 이미지를 표시
 4. 검색창에 글자를 입력하여 즉각적으로 이름과 일치하는 연락처를 필터링
-5. 연락처를 선택할 경우, 오른쪽 이미지와 창을 표시하여 세부 정보와 수정/삭제를 할 수 있도록 함 
+5. 연락처를 선택할 경우, 오른쪽 이미지와 창을 표시하여 세부 정보와 수정/삭제 가능
 
 ## Implementation.
 
@@ -371,6 +373,122 @@ alertDialog로 dialog에서 버튼 클릭을 통해, 각각 카메라, 갤러리
     위 라이브러리에서 *setEndTime* 메서드에 오류가 있어서 *setEndTimeMinute*로 해결함.
 
 4. 알림 기능
+
+알림 기능은 ```PendingIntent```를 ```getBroadcast```로 보내고, ```BroadcastReceiver```에서 받음으로써 알림을 발생시킵니다.
+
+*ScheduleAdapter.setNotification*
+```java
+    public static void setNotification(String when, String title, Activity m_activity) throws ParseException {
+
+        Intent receiverIntent = new Intent(m_activity, AlarmReceiver.class);
+        receiverIntent.putExtra("title", title);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(m_activity, title.hashCode(), receiverIntent, 0);
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date(System.currentTimeMillis());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String getTime = sdf.format(date);
+
+        Log.e("TAG", title);
+
+        when = getTime.concat(" " + when).concat(":00");
+        Date datetime = dateFormat.parse(when);
+        Log.e("NOTI", "SET:" + datetime.toString());
+        Calendar calendar = Calendar.getInstance();
+        long repeatInterval = AlarmManager.INTERVAL_DAY;
+        long triggerTime = (SystemClock.elapsedRealtime()
+                + repeatInterval);
+        if (datetime.before(date)) {
+            datetime.setTime(date.getTime() + repeatInterval);
+        }
+
+        calendar.setTime(datetime);
+        AlarmManager alarmManager = (AlarmManager) m_activity.getSystemService(Context.ALARM_SERVICE);
+
+
+        alarmManager.setInexactRepeating(
+                AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                triggerTime, repeatInterval,
+                pendingIntent
+        );
+
+        alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(), pendingIntent);
+    }
+```
+
+시간을 파싱하여 오늘의 해당 시각에 알림을 설정합니다.
+
+각 알림은 알림 명의 ```hashcode```를 이용하여 채널을 구분함으로써 구분 가능합니다.
+
+*AlaramReceiver extends BroadcastReceiver*
+```java
+package com.example.madcamp_pj1.ui.schedule;
+
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Build;
+import android.util.Log;
+
+import androidx.core.app.NotificationCompat;
+
+import com.example.madcamp_pj1.MainActivity;
+import com.example.madcamp_pj1.R;
+
+import java.io.BufferedInputStream;
+import java.io.IOException;
+
+public class AlarmReceiver extends BroadcastReceiver {
+
+    NotificationManager manager;
+    NotificationCompat.Builder builder;
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+
+        Intent intent2 = new Intent(context, MainActivity.class);
+        String title = intent.getExtras().getString("title");
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, title.hashCode(), intent2, PendingIntent.FLAG_UPDATE_CURRENT);
+        manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        Log.e("ALARM", title);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (manager.getNotificationChannel(title) == null) {
+                manager.createNotificationChannel(
+                        new NotificationChannel(title, title, NotificationManager.IMPORTANCE_DEFAULT)
+                );
+            }
+            builder = new NotificationCompat.Builder(context, title);
+        } else {
+            builder = new NotificationCompat.Builder(context);
+        }
+        AssetManager am = context.getAssets();
+        BufferedInputStream buf = null;
+        try {
+            buf = new BufferedInputStream(am.open("logo.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Bitmap bitmap = BitmapFactory.decodeStream(buf);
+
+        builder.setContentTitle(title)
+                .setSmallIcon(R.drawable.ic_baseline_chat_bubble_outline_24)
+                .setLargeIcon(bitmap)
+                .setAutoCancel(true)
+                .setContentIntent(pendingIntent);
+        Log.e("ALARM", title);
+        Notification notification = builder.build();
+        manager.notify(title.hashCode(), notification);
+    }
+}
+```
+해당 시각이 되면, 알림 채널을 ```hashcode```로 설정하고, ```NotificationCompat.Builder```를 이용하여 알림을 만들어서, 보여줍니다.
 
 ### Interaction
 
