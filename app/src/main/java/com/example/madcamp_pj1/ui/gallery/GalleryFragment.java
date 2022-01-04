@@ -197,8 +197,6 @@ public class GalleryFragment extends Fragment {
         button = dialog.findViewById(android.R.id.button3);
         button.setTypeface(face);
         button.setTextColor(0xFF000000);
-
-
     }
 
     @SuppressLint({"ClickableViewAccessibility", "WrongThread"})
